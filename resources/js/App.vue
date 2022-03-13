@@ -1,12 +1,30 @@
 <template>
     <div>
-        Hello World!
-        <button class="btn btn-primary">5555</button>
+        <Header/>
+
+        <div id="layoutSidenav">
+            <Sidebar/>
+
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        Hellou
+                    </div>
+                </main>
+                <Footer/>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-export default {
+import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
+import Footer from "./components/Footer";
 
+export default {
+    components: {
+        Header,Sidebar,Footer
+    }
 }
 </script>
