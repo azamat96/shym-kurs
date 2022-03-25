@@ -3688,6 +3688,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "TeachersList"
 });
@@ -10355,7 +10359,10 @@ var staticRenderFns = [
         _c("div", { staticClass: "card-body" }, [
           _c(
             "table",
-            { staticClass: "table", attrs: { id: "datatablesSimple" } },
+            {
+              staticClass: "table table-bordered",
+              attrs: { id: "datatablesSimple" },
+            },
             [
               _c("caption", [_vm._v("Тізімде 100 мұғалімнің 22 көрсетілінді")]),
               _vm._v(" "),
@@ -10764,7 +10771,12 @@ var staticRenderFns = [
                       "aria-disabled": "true",
                     },
                   },
-                  [_vm._v("Артқа")]
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("«"),
+                    ]),
+                    _vm._v(" Артқа\n                        "),
+                  ]
                 ),
               ]),
               _vm._v(" "),
@@ -10794,7 +10806,10 @@ var staticRenderFns = [
               _vm._v(" "),
               _c("li", { staticClass: "page-item" }, [
                 _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
-                  _vm._v("Алға"),
+                  _vm._v("\n                            Алға "),
+                  _c("span", { attrs: { "aria-hidden": "true" } }, [
+                    _vm._v("»"),
+                  ]),
                 ]),
               ]),
             ]),

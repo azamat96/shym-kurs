@@ -18,7 +18,7 @@
                 Мұғалімдер тізімі
             </div>
             <div class="card-body">
-                <table id="datatablesSimple" class="table">
+                <table id="datatablesSimple" class="table table-bordered">
                     <caption>Тізімде 100 мұғалімнің 22 көрсетілінді</caption>
                     <thead class="table-light">
                     <tr>
@@ -246,14 +246,18 @@
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-start">
                         <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Артқа</a>
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                <span aria-hidden="true">&laquo;</span> Артқа
+                            </a>
                         </li>
                         <li class="page-item active"><a class="page-link" href="#">1</a></li>
                         <li class="page-item"><a class="page-link" href="#">2</a></li>
                         <li class="page-item"><a class="page-link" href="#">3</a></li>
                         <li class="page-item"><a class="page-link" href="#">4</a></li>
                         <li class="page-item">
-                            <a class="page-link" href="#">Алға</a>
+                            <a class="page-link" href="#">
+                                Алға <span aria-hidden="true">&raquo;</span>
+                            </a>
                         </li>
                     </ul>
                 </nav>
