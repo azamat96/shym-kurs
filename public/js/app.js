@@ -3379,6 +3379,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Sidebar"
 });
@@ -3411,6 +3416,176 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "AddTeacher"
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/CoursesList.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/CoursesList.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "CoursesList",
+  data: function data() {
+    return {
+      newCourse: {
+        name: '',
+        description: ''
+      }
+    };
+  },
+  methods: {
+    CreateCourse: function CreateCourse() {
+      console.log('form submitted');
+    }
+  }
 });
 
 /***/ }),
@@ -3693,7 +3868,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "TeachersList"
+  name: "TeachersList",
+  data: function data() {
+    return {};
+  }
 });
 
 /***/ }),
@@ -10203,7 +10381,7 @@ var render = function () {
               ),
               _vm._v(" "),
               _c("div", { staticClass: "sb-sidenav-menu-heading" }, [
-                _vm._v("Мұғалім"),
+                _vm._v("Мұғалімдер"),
               ]),
               _vm._v(" "),
               _c(
@@ -10230,10 +10408,30 @@ var render = function () {
                 },
                 [
                   _c("div", { staticClass: "sb-nav-link-icon" }, [
-                    _c("i", { staticClass: "fas fa-user-circle" }),
+                    _c("i", { staticClass: "fas fa-user-plus" }),
                   ]),
                   _vm._v(
                     "\n                    Мұғалім қосу/өшіру\n                "
+                  ),
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "sb-sidenav-menu-heading" }, [
+                _vm._v("Курстар"),
+              ]),
+              _vm._v(" "),
+              _c(
+                "router-link",
+                {
+                  staticClass: "nav-link",
+                  attrs: { to: "/course/list", "exact-path": "" },
+                },
+                [
+                  _c("div", { staticClass: "sb-nav-link-icon" }, [
+                    _c("i", { staticClass: "fas fa-list-alt" }),
+                  ]),
+                  _vm._v(
+                    "\n                    Курстар тізімі\n                "
                   ),
                 ]
               ),
@@ -10306,6 +10504,471 @@ var staticRenderFns = [
           ),
         ]),
       ]),
+    ])
+  },
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/CoursesList.vue?vue&type=template&id=248abdb2&scoped=true&":
+/*!*********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/CoursesList.vue?vue&type=template&id=248abdb2&scoped=true& ***!
+  \*********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container-fluid px-4" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _vm._m(1),
+    _vm._v(" "),
+    _vm._m(2),
+    _vm._v(" "),
+    _vm._m(3),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "exampleModal",
+          tabindex: "-1",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true",
+        },
+      },
+      [
+        _c("div", { staticClass: "modal-dialog modal-dialog-centered" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function ($event) {
+                    $event.preventDefault()
+                    return _vm.CreateCourse.apply(null, arguments)
+                  },
+                },
+              },
+              [
+                _vm._m(4),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-body" }, [
+                  _c("div", { staticClass: "mb-3" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "form-label",
+                        attrs: { for: "exampleInputEmail1" },
+                      },
+                      [_vm._v("Курс атауы")]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.newCourse.name,
+                          expression: "newCourse.name",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        id: "exampleInputEmail1",
+                        "aria-describedby": "emailHelp",
+                      },
+                      domProps: { value: _vm.newCourse.name },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.newCourse, "name", $event.target.value)
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-text", attrs: { id: "emailHelp" } },
+                      [_vm._v("Басқа курс атаумен бірдей болмағаны жөн")]
+                    ),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mb-3" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "form-label",
+                        attrs: { for: "exampleFormControlTextarea1" },
+                      },
+                      [_vm._v("Толық ақпарат")]
+                    ),
+                    _vm._v(" "),
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.newCourse.description,
+                          expression: "newCourse.description",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      attrs: { id: "exampleFormControlTextarea1", rows: "3" },
+                      domProps: { value: _vm.newCourse.description },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.newCourse,
+                            "description",
+                            $event.target.value
+                          )
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-text", attrs: { id: "textHelp" } },
+                      [_vm._v("Бос қалдыруға болады")]
+                    ),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _vm._m(5),
+              ]
+            ),
+          ]),
+        ]),
+      ]
+    ),
+  ])
+}
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "d-flex justify-content-between align-items-center" },
+      [
+        _c("h1", { staticClass: "mt-4" }, [_vm._v("Курстар тізімі")]),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            attrs: {
+              "data-bs-toggle": "modal",
+              "data-bs-target": "#exampleModal",
+            },
+          },
+          [
+            _c("i", { staticClass: "fas fa-plus-circle" }),
+            _vm._v(" Жаңа курс қосу\n        "),
+          ]
+        ),
+      ]
+    )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ol", { staticClass: "breadcrumb mb-4" }, [
+      _c("li", { staticClass: "breadcrumb-item" }, [
+        _c("a", { attrs: { href: "/" } }, [_vm._v("Басты бет")]),
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "breadcrumb-item active" }, [
+        _vm._v("Курстар тізімі"),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "ul",
+      { staticClass: "nav nav-pills", attrs: { id: "myTab", role: "tablist" } },
+      [
+        _c("li", { staticClass: "nav-item", attrs: { role: "presentation" } }, [
+          _c(
+            "button",
+            {
+              staticClass: "nav-link active",
+              attrs: {
+                id: "home-tab",
+                "data-bs-toggle": "tab",
+                "data-bs-target": "#home",
+                type: "button",
+                role: "tab",
+                "aria-controls": "home",
+                "aria-selected": "true",
+              },
+            },
+            [_vm._v("Активный курстар")]
+          ),
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "nav-item", attrs: { role: "presentation" } }, [
+          _c(
+            "button",
+            {
+              staticClass: "nav-link",
+              attrs: {
+                id: "profile-tab",
+                "data-bs-toggle": "tab",
+                "data-bs-target": "#profile",
+                type: "button",
+                role: "tab",
+                "aria-controls": "profile",
+                "aria-selected": "false",
+              },
+            },
+            [_vm._v("Архивный курстар")]
+          ),
+        ]),
+      ]
+    )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "tab-content mb-4 mt-2", attrs: { id: "myTabContent" } },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "tab-pane fade show active",
+            attrs: {
+              id: "home",
+              role: "tabpanel",
+              "aria-labelledby": "home-tab",
+            },
+          },
+          [
+            _c("table", { staticClass: "table table-bordered" }, [
+              _c("caption", [_vm._v("Тізімде бүкіл активты курстар")]),
+              _vm._v(" "),
+              _c("thead", { staticClass: "table-light" }, [
+                _c("tr", [
+                  _c("th", [_vm._v("#")]),
+                  _vm._v(" "),
+                  _c("th", [_vm._v("Курс атауы")]),
+                  _vm._v(" "),
+                  _c("th", [_vm._v("2022")]),
+                  _vm._v(" "),
+                  _c("th", [_vm._v("2021")]),
+                  _vm._v(" "),
+                  _c("th", [_vm._v("2020-ға дейін")]),
+                ]),
+              ]),
+              _vm._v(" "),
+              _c("tbody", [
+                _c("tr", [
+                  _c("td", [_vm._v("1")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("Жаңартылған")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("56")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("106")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("505")]),
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [_vm._v("2")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("Әдістемелік")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("56")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("106")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("505")]),
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [_vm._v("3")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("Пән аралық")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("56")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("106")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("505")]),
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [_vm._v("4")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("Жаңартылған")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("56")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("106")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("505")]),
+                ]),
+              ]),
+            ]),
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "tab-pane fade",
+            attrs: {
+              id: "profile",
+              role: "tabpanel",
+              "aria-labelledby": "profile-tab",
+            },
+          },
+          [
+            _c("table", { staticClass: "table table-bordered" }, [
+              _c("caption", [_vm._v("Тізімде бүкіл архивты курстар")]),
+              _vm._v(" "),
+              _c("thead", { staticClass: "table-light" }, [
+                _c("tr", [
+                  _c("th", [_vm._v("#")]),
+                  _vm._v(" "),
+                  _c("th", [_vm._v("Курс атауы")]),
+                  _vm._v(" "),
+                  _c("th", [_vm._v("2022")]),
+                  _vm._v(" "),
+                  _c("th", [_vm._v("2021")]),
+                  _vm._v(" "),
+                  _c("th", [_vm._v("2020-ға дейін")]),
+                ]),
+              ]),
+              _vm._v(" "),
+              _c("tbody", [
+                _c("tr", [
+                  _c("td", [_vm._v("1")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("Жаңартылған")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("56")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("106")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("505")]),
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [_vm._v("2")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("Әдістемелік")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("56")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("106")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("505")]),
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [_vm._v("3")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("Пән аралық")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("56")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("106")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("505")]),
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [_vm._v("4")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("Жаңартылған")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("56")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("106")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v("505")]),
+                ]),
+              ]),
+            ]),
+          ]
+        ),
+      ]
+    )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        {
+          staticClass: "flex-fill modal-title text-center",
+          attrs: { id: "exampleModalLabel" },
+        },
+        [_vm._v("Жаңа курс қосу")]
+      ),
+      _vm._v(" "),
+      _c("button", {
+        staticClass: "btn-close",
+        attrs: {
+          type: "button",
+          "data-bs-dismiss": "modal",
+          "aria-label": "Close",
+        },
+      }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer justify-content-center" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "button", "data-bs-dismiss": "modal" },
+        },
+        [_vm._v("Жабу")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+        [
+          _c("i", { staticClass: "fas fa-check-circle" }),
+          _vm._v(" Курсты Қосу"),
+        ]
+      ),
     ])
   },
 ]
@@ -26662,6 +27325,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _views_Welcome__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./views/Welcome */ "./resources/js/views/Welcome.vue");
 /* harmony import */ var _views_TeachersList__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./views/TeachersList */ "./resources/js/views/TeachersList.vue");
 /* harmony import */ var _views_AddTeacher__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./views/AddTeacher */ "./resources/js/views/AddTeacher.vue");
+/* harmony import */ var _views_CoursesList__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/CoursesList */ "./resources/js/views/CoursesList.vue");
+
 
 
 
@@ -26680,6 +27345,10 @@ var routes = [{
   path: '/teacher/add-remove',
   name: 'add_teacher',
   component: _views_AddTeacher__WEBPACK_IMPORTED_MODULE_4__["default"]
+}, {
+  path: '/course/list',
+  name: 'courses_list',
+  component: _views_CoursesList__WEBPACK_IMPORTED_MODULE_5__["default"]
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   routes: routes,
@@ -26753,6 +27422,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddTeacher_vue_vue_type_template_id_a4060c40_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddTeacher_vue_vue_type_template_id_a4060c40_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/CoursesList.vue":
+/*!********************************************!*\
+  !*** ./resources/js/views/CoursesList.vue ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _CoursesList_vue_vue_type_template_id_248abdb2_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CoursesList.vue?vue&type=template&id=248abdb2&scoped=true& */ "./resources/js/views/CoursesList.vue?vue&type=template&id=248abdb2&scoped=true&");
+/* harmony import */ var _CoursesList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CoursesList.vue?vue&type=script&lang=js& */ "./resources/js/views/CoursesList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _CoursesList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _CoursesList_vue_vue_type_template_id_248abdb2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _CoursesList_vue_vue_type_template_id_248abdb2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "248abdb2",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/CoursesList.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/CoursesList.vue?vue&type=script&lang=js&":
+/*!*********************************************************************!*\
+  !*** ./resources/js/views/CoursesList.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CoursesList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./CoursesList.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/CoursesList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CoursesList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/CoursesList.vue?vue&type=template&id=248abdb2&scoped=true&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/views/CoursesList.vue?vue&type=template&id=248abdb2&scoped=true& ***!
+  \***************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CoursesList_vue_vue_type_template_id_248abdb2_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./CoursesList.vue?vue&type=template&id=248abdb2&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/CoursesList.vue?vue&type=template&id=248abdb2&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CoursesList_vue_vue_type_template_id_248abdb2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CoursesList_vue_vue_type_template_id_248abdb2_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

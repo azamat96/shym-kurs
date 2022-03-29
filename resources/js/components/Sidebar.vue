@@ -7,15 +7,20 @@
                         <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
                         Басты бет
                     </router-link>
-                    <div class="sb-sidenav-menu-heading">Мұғалім</div>
+                    <div class="sb-sidenav-menu-heading">Мұғалімдер</div>
                     <router-link to="/teacher/list" class="nav-link" exact-path>
                         <div class="sb-nav-link-icon">
                             <i class="fas fa-table"></i></div>
                         Мұғалімдер тізімі
                     </router-link>
                     <router-link to="/teacher/add-remove" class="nav-link" exact>
-                        <div class="sb-nav-link-icon"><i class="fas fa-user-circle"></i></div>
+                        <div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>
                         Мұғалім қосу/өшіру
+                    </router-link>
+                    <div class="sb-sidenav-menu-heading">Курстар</div>
+                    <router-link to="/course/list" class="nav-link" exact-path>
+                        <div class="sb-nav-link-icon"><i class="fas fa-list-alt"></i></div>
+                        Курстар тізімі
                     </router-link>
                 </div>
             </div>

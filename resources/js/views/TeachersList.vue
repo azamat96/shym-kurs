@@ -268,7 +268,12 @@
 
 <script>
 export default {
-    name: "TeachersList"
+    name: "TeachersList",
+    data() {
+        return {
+
+        }
+    }
 }
 </script>
 

@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Welcome from "./views/Welcome";
 import TeachersList from "./views/TeachersList";
 import AddTeacher from "./views/AddTeacher";
+import CoursesList from "./views/CoursesList";
 
 Vue.use(Router);
 
@@ -21,7 +22,12 @@ const routes = [
         path: '/teacher/add-remove',
         name: 'add_teacher',
         component: AddTeacher
-    }
+    },
+    {
+        path: '/course/list',
+        name: 'courses_list',
+        component: CoursesList
+    },
 ]
 
 const router = new Router({
