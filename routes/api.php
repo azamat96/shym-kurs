@@ -7,3 +7,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('subjects', 'SubjectController');
+Route::resource('course', 'CourseController');

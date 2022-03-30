@@ -21,7 +21,7 @@ class CreateTeachersTable extends Migration
             $table->string('stazh');
             $table->text('additional_info')->nullable();
             $table->string('phone');
-            $table->boolean('is_active');
+            $table->boolean('is_active')->default(true);
             $table->bigInteger('subject_id')->unsigned();
             $table->bigInteger('school_id')->unsigned();
 
