@@ -26,39 +26,26 @@
                     <tr>
                         <th>#</th>
                         <th>Курс атауы</th>
+                        <th>Толық ақпарат</th>
                         <th>2022</th>
                         <th>2021</th>
-                        <th>2020-ға дейін</th>
+                        <th>2019 жане оған дейін</th>
+                        <th><i class="fas fa-cog"></i> Қызмет түрлері</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Жаңартылған</td>
-                        <td>56</td>
+                    <tr v-for="(course, index) in coursesList" :key="index">
+                        <td>{{ index+1 }}</td>
+                        <td>{{ course.name }}</td>
+                        <td>{{ course.description }}</td>
                         <td>106</td>
                         <td>505</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Әдістемелік</td>
-                        <td>56</td>
-                        <td>106</td>
                         <td>505</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Пән аралық</td>
-                        <td>56</td>
-                        <td>106</td>
-                        <td>505</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>Жаңартылған</td>
-                        <td>56</td>
-                        <td>106</td>
-                        <td>505</td>
+                        <td>
+                            <button v-on:click="editCourse(course)" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өзгерту"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-secondary btn-sm"><i class="fas fa-power-off"></i> Архивтау</button>
+                            <button v-on:click="deleteCourse(course)" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өшіру"><i class="fas fa-trash"></i></button>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -112,7 +99,7 @@
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="createCourseModal">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form v-on:submit.prevent="CreateCourse">
+                    <form v-on:submit.prevent="createCourse">
                     <div class="modal-header">
                         <h5 class="flex-fill modal-title text-center" id="exampleModalLabel">Жаңа курс қосу</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ref="closeModal"></button>
@@ -141,12 +128,45 @@
                 </div>
             </div>
         </div>
+        <!-- Modal for edit course -->
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="editCourseModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form v-on:submit.prevent="updateCourse()">
+                        <div class="modal-header">
+                            <h5 class="flex-fill modal-title text-center" id="editModalLabel">Курсты өзгерту</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ref="closeModal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">Курс атауы</label>
+                                <input v-model="editCourseData.name" v-bind:class="{'is-invalid': errors.name}" type="text" class="form-control" aria-describedby="emailHelp" required>
+                                <div class="invalid-feedback" v-if="errors.name" v-bind:class="{'d-block': errors.name}">{{ errors.name[0] }}</div>
+                                <div class="form-text" v-else>Басқа курс атаумен бірдей болмағаны жөн</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleFormControlTextarea1" class="form-label">Толық ақпарат</label>
+                                <textarea v-model="editCourseData.description" class="form-control" rows="3"></textarea>
+                                <div class="form-text">Бос қалдыруға болады</div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Жабу</button>
+                            <button type="submit" class="btn btn-primary">
+                                <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span v-else><i class="fas fa-check-circle"></i></span> Курсты өзгерту
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <!-- Toast Message -->
         <div class="position-fixed top-0 end-0 p-3" style="z-index: 1060">
             <div ref="toastOk" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body">
-                        <i class="fas fa-check-circle"></i> Жаңа курс қосылды
+                        <i class="fas fa-check-circle"></i> Жасалынған өзгерістер орындалды
                     </div>
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
@@ -166,33 +186,46 @@
 
 <script>
 import * as courseService from '../services/course_service';
-import { Toast } from 'bootstrap'
+import { Toast, Modal } from 'bootstrap'
 
 export default {
     name: "CoursesList",
     data() {
         return {
+            coursesList: [],
+            inActiveCoursesList: [],
             newCourse: {
                 name: '',
                 description: ''
             },
+            editCourseData: {},
             errors: {},
             toast: {
                 ok: null,
                 err: null
             },
-            loading: false
+            loading: false,
+            createCourseModal: null,
+            editCourseModal: null
         }
     },
     mounted() {
         this.toast.ok = new Toast(this.$refs.toastOk)
         this.toast.err = new Toast(this.$refs.toastErr)
+        this.createCourseModal = new Modal(this.$refs.createCourseModal)
+        this.editCourseModal = new Modal(this.$refs.editCourseModal)
+        this.loadCourses()
     },
     methods: {
-        hideModal() {
-            this.$refs.closeModal.click()
+        loadCourses: async function() {
+            try {
+                const response = await courseService.loadCourses();
+                this.coursesList = response.data;
+            } catch (error) {
+                this.toast.err.show()
+            }
         },
-        CreateCourse: async function() {
+        createCourse: async function() {
             this.loading = true
             let formData = new FormData()
             formData.append('name', this.newCourse.name)
@@ -200,9 +233,9 @@ export default {
 
             try {
                 const response = await courseService.createCourse(formData)
-                console.log(response)
+                this.coursesList.unshift(response.data)
                 this.errors = {}
-                this.hideModal()
+                this.createCourseModal.hide()
                 this.toast.ok.show()
             } catch (error) {
                 switch (error.response.status) {
@@ -216,7 +249,48 @@ export default {
             }
             this.loading = false;
         },
+        deleteCourse: async function(course) {
+            if (!window.confirm(`Сіз шынында да "${course.name}" курсын өшіргіңіз келеді ме?`)) {
+                return;
+            }
+            try {
+                await courseService.deleteCourse(course.id);
+                this.coursesList = this.coursesList.filter(obj => {
+                    return obj.id != course.id;
+                });
+            } catch (error) {
+                this.toast.err.show()
+            }
+        },
+        editCourse(course) {
+            this.editCourseData = {...course}
+            this.editCourseModal.show()
+        },
+        updateCourse: async function() {
+            this.loading = true;
+            try {
+                const formData = new FormData();
+                formData.append('name', this.editCourseData.name)
+                formData.append('description', this.editCourseData.description)
+                formData.append('_method', 'put')
 
+                const response = await courseService.updateCourse(this.editCourseData.id, formData)
+                this.coursesList.map(course => {
+                    if (course.id == response.data.id) {
+                        for (let key in response.data) {
+                            course[key] = response.data[key]
+                        }
+                    }
+                })
+                this.errors = {}
+                this.editCourseModal.hide()
+                // TODO toast отдельный компоненентке шгару керек toast.show('Ok message')
+                this.toast.ok.show()
+            } catch (error) {
+                this.toast.err.show()
+            }
+            this.loading = false
+        }
     }
 }
 </script>

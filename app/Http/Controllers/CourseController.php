@@ -14,7 +14,8 @@ class CourseController extends Controller
      */
     public function index()
     {
-        //
+        $courses = Course::where('is_active', true)->orderBy('created_at', 'desc')->get();
+        return response()->json($courses, 200);
     }
 
     /**
@@ -42,7 +43,7 @@ class CourseController extends Controller
         $course = new Course();
         $course->name = $request->name;
         $course->description = $request->description;
-        
+
         if ($course->save()) {
             return response()->json($course, 200);
         }
@@ -81,7 +82,19 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|min:3',
+        ]);
+
+        $course = Course::find($id);
+        $course->name = $request->name;
+        $course->description = $request->description;
+
+        if ($course->save()) {
+            return response()->json($course, 200);
+        }
+
+        return response()->json($course, 500);
     }
 
     /**
@@ -92,6 +105,6 @@ class CourseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return response()->json(Course::destroy($id), 200);
     }
 }
