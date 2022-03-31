@@ -10,24 +10,30 @@
             <li class="breadcrumb-item"><a href="/">Басты бет</a></li>
             <li class="breadcrumb-item active">Курстар тізімі</li>
         </ol>
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#active-courses" type="button" role="tab" aria-controls="home" aria-selected="true">
-                    Активный курстар
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#archive-courses" type="button" role="tab" aria-controls="profile" aria-selected="false">
-                    Архивный курстар
-                </button>
-            </li>
-        </ul>
-        <div class="tab-content mb-4" id="myTabContent">
-            <div class="tab-pane fade show active" id="active-courses" role="tabpanel" aria-labelledby="home-tab">
-                <ActiveCourses></ActiveCourses>
+        <div class="card mb-4">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#active-courses" type="button" role="tab" aria-controls="home" aria-selected="true">
+                            Активный курстар
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#archive-courses" type="button" role="tab" aria-controls="profile" aria-selected="false">
+                            Архивный курстар
+                        </button>
+                    </li>
+                </ul>
             </div>
-            <div class="tab-pane fade" id="archive-courses" role="tabpanel" aria-labelledby="profile-tab">
-                <ArchiveCourses></ArchiveCourses>
+            <div class="card-body">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="active-courses" role="tabpanel" aria-labelledby="home-tab">
+                        <ActiveCourses></ActiveCourses>
+                    </div>
+                    <div class="tab-pane fade" id="archive-courses" role="tabpanel" aria-labelledby="profile-tab">
+                        <ArchiveCourses></ArchiveCourses>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- Modal for create course -->
@@ -97,18 +103,18 @@ export default {
             formData.append('description', this.newCourse.description)
 
             try {
-                const response = await courseService.createCourse(formData)
-                this.coursesList.unshift(response.data)
+                const response = await this.$store.dispatch('createCourse', formData)
+                this.$store.commit('CREATE_COURSE', response.data)
                 this.errors = {}
                 this.createCourseModal.hide()
-                this.$toast.success('Жасалынған өзгерістер орындалды');
+                this.$toast.success(`Жаңа "${response.data.name}" курсы қосылды`);
             } catch (error) {
                 switch (error.response.status) {
                     case 422:
                         this.errors = error.response.data.errors;
                         break;
                     default:
-                        this.$toast.error('Ощибка с сервером');
+                        this.$toast.error('Серверде қателіктері');
                         break;
                 }
             }

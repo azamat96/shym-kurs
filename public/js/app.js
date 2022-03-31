@@ -5110,6 +5110,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
 /* harmony import */ var _services_course_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/course_service */ "./resources/js/services/course_service.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -5194,23 +5195,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ActiveCourses",
   data: function data() {
     return {
-      coursesList: [],
       editCourseData: {},
       errors: {},
-      pageIsLoading: false,
-      loading: false,
+      loading: {
+        page: false,
+        update: false,
+        archive: false
+      },
       editCourseModal: null
     };
   },
+  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapState"])({
+    coursesList: 'activeCourses'
+  }),
   mounted: function mounted() {
     this.editCourseModal = new bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"](this.$refs.editCourseModal);
-    this.pageIsLoading = true;
     this.loadCourses();
   },
   methods: {
@@ -5221,30 +5230,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.prev = 0;
-                _context.next = 3;
-                return _services_course_service__WEBPACK_IMPORTED_MODULE_2__["loadCourses"]();
+                this.loading.page = true;
+                _context.prev = 1;
+                _context.next = 4;
+                return this.$store.dispatch('getActiveCourses');
 
-              case 3:
+              case 4:
                 response = _context.sent;
-                this.coursesList = response.data;
-                _context.next = 10;
+                this.$store.commit('SET_ACTIVE_COURSES', response.data);
+                _context.next = 11;
                 break;
 
-              case 7:
-                _context.prev = 7;
-                _context.t0 = _context["catch"](0);
+              case 8:
+                _context.prev = 8;
+                _context.t0 = _context["catch"](1);
                 this.$toast.error('Ощибка с сервером');
 
-              case 10:
-                this.pageIsLoading = false;
-
               case 11:
+                this.loading.page = false;
+
+              case 12:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[0, 7]]);
+        }, _callee, this, [[1, 8]]);
       }));
 
       function loadCourses() {
@@ -5269,12 +5279,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 2:
                 _context2.prev = 2;
                 _context2.next = 5;
-                return _services_course_service__WEBPACK_IMPORTED_MODULE_2__["deleteCourse"](course.id);
+                return this.$store.dispatch('deleteCourse', course.id);
 
               case 5:
-                this.coursesList = this.coursesList.filter(function (obj) {
-                  return obj.id != course.id;
-                });
+                this.$store.commit('DELETE_COURSE', course.id);
                 _context2.next = 11;
                 break;
 
@@ -5308,24 +5316,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                this.loading = true;
+                this.loading.update = true;
                 _context3.prev = 1;
                 formData = new FormData();
                 formData.append('name', this.editCourseData.name);
                 formData.append('description', this.editCourseData.description);
                 formData.append('_method', 'put');
                 _context3.next = 8;
-                return _services_course_service__WEBPACK_IMPORTED_MODULE_2__["updateCourse"](this.editCourseData.id, formData);
+                return this.$store.dispatch('updateCourse', {
+                  id: this.editCourseData.id,
+                  formData: formData
+                });
 
               case 8:
                 response = _context3.sent;
-                this.coursesList.map(function (course) {
-                  if (course.id == response.data.id) {
-                    for (var key in response.data) {
-                      course[key] = response.data[key];
-                    }
-                  }
-                });
+                this.$store.commit('UPDATE_ACTIVE_COURSE', response.data);
                 this.errors = {};
                 this.editCourseModal.hide();
                 this.$toast.success('Жасалынған өзгерістер орындалды');
@@ -5338,7 +5343,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 this.$toast.error('Ощибка с сервером');
 
               case 18:
-                this.loading = false;
+                this.loading.update = false;
 
               case 19:
               case "end":
@@ -5353,6 +5358,62 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return updateCourse;
+    }(),
+    archiveCourse: function () {
+      var _archiveCourse = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(course, index) {
+        var formData, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                if (window.confirm("\u0421\u0456\u0437 \"".concat(course.name, "\" \u043A\u0443\u0440\u0441\u044B\u043D \u0430\u0440\u0445\u0438\u0432\u0442\u0430\u0493\u044B\u04A3\u044B\u0437 \u043A\u0435\u043B\u0435\u0434\u0456 \u043C\u0435?"))) {
+                  _context4.next = 2;
+                  break;
+                }
+
+                return _context4.abrupt("return");
+
+              case 2:
+                this.loading.archive = index;
+                _context4.prev = 3;
+                formData = new FormData();
+                formData.append('is_active', 0);
+                formData.append('_method', 'put');
+                _context4.next = 9;
+                return this.$store.dispatch('updateCourse', {
+                  id: course.id,
+                  formData: formData
+                });
+
+              case 9:
+                response = _context4.sent;
+                this.$store.commit('ARCHIVE_COURSE', response.data);
+                console.log(response, 'response');
+                this.$toast.success("\u041A\u0443\u0440\u0441 \"".concat(response.data.name, "\" \u0430\u0440\u0445\u0438\u0432\u049B\u0430 \u0436\u0456\u0431\u0435\u0440\u0456\u043B\u0456\u043D\u0434\u0456"));
+                _context4.next = 18;
+                break;
+
+              case 15:
+                _context4.prev = 15;
+                _context4.t0 = _context4["catch"](3);
+                this.$toast.error('Серверде қателіктері');
+
+              case 18:
+                this.loading.archive = false;
+
+              case 19:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this, [[3, 15]]);
+      }));
+
+      function archiveCourse(_x2, _x3) {
+        return _archiveCourse.apply(this, arguments);
+      }
+
+      return archiveCourse;
     }()
   }
 });
@@ -5372,6 +5433,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
 /* harmony import */ var _services_course_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/course_service */ "./resources/js/services/course_service.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -5458,11 +5520,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ActiveCourses",
   data: function data() {
     return {
-      coursesList: [],
       editCourseData: {},
       errors: {},
       pageIsLoading: false,
@@ -5470,6 +5532,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       editCourseModal: null
     };
   },
+  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapState"])({
+    coursesList: 'archiveCourses'
+  }),
   mounted: function mounted() {
     this.editCourseModal = new bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"](this.$refs.editCourseModal);
     this.pageIsLoading = true;
@@ -5485,13 +5550,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context.prev = 0;
                 _context.next = 3;
-                return _services_course_service__WEBPACK_IMPORTED_MODULE_2__["loadCourses"]({
-                  is_active: 0
-                });
+                return this.$store.dispatch('getArchiveCourses');
 
               case 3:
                 response = _context.sent;
-                this.coursesList = response.data;
+                this.$store.commit('SET_ARCHIVE_COURSES', response.data);
                 _context.next = 10;
                 break;
 
@@ -5945,6 +6008,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -5983,14 +6052,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 formData.append('description', this.newCourse.description);
                 _context.prev = 4;
                 _context.next = 7;
-                return _services_course_service__WEBPACK_IMPORTED_MODULE_1__["createCourse"](formData);
+                return this.$store.dispatch('createCourse', formData);
 
               case 7:
                 response = _context.sent;
-                this.coursesList.unshift(response.data);
+                this.$store.commit('CREATE_COURSE', response.data);
                 this.errors = {};
                 this.createCourseModal.hide();
-                this.$toast.success('Жасалынған өзгерістер орындалды');
+                this.$toast.success("\u0416\u0430\u04A3\u0430 \"".concat(response.data.name, "\" \u043A\u0443\u0440\u0441\u044B \u049B\u043E\u0441\u044B\u043B\u0434\u044B"));
                 _context.next = 23;
                 break;
 
@@ -6006,7 +6075,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("break", 23);
 
               case 21:
-                this.$toast.error('Ощибка с сервером');
+                this.$toast.error('Серверде қателіктері');
                 return _context.abrupt("break", 23);
 
               case 23:
@@ -13360,17 +13429,25 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm.pageIsLoading
+    _vm.loading.page
       ? _c("div", { staticClass: "d-flex justify-content-center" }, [_vm._m(0)])
-      : _c("table", { staticClass: "table table-bordered" }, [
-          _c("caption", [_vm._v("Тізімде бүкіл активты курстар")]),
+      : _c("table", { staticClass: "table table-bordered mb-0" }, [
+          _c("caption", [
+            _vm._v(
+              _vm._s(
+                _vm.coursesList.length > 0
+                  ? "Тізімде бүкіл активты курстар"
+                  : "Активты курстар жоқ"
+              )
+            ),
+          ]),
           _vm._v(" "),
           _vm._m(1),
           _vm._v(" "),
           _c(
             "tbody",
             _vm._l(_vm.coursesList, function (course, index) {
-              return _c("tr", { key: index }, [
+              return _c("tr", { key: course.id }, [
                 _c("td", [_vm._v(_vm._s(index + 1))]),
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(course.name))]),
@@ -13402,7 +13479,28 @@ var render = function () {
                     [_c("i", { staticClass: "fas fa-edit" })]
                   ),
                   _vm._v(" "),
-                  _vm._m(2, true),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary btn-sm",
+                      on: {
+                        click: function ($event) {
+                          return _vm.archiveCourse(course, index)
+                        },
+                      },
+                    },
+                    [
+                      _vm.loading.archive === index
+                        ? _c("span", {
+                            staticClass: "spinner-border spinner-border-sm",
+                            attrs: { role: "status", "aria-hidden": "true" },
+                          })
+                        : _c("span", [
+                            _c("i", { staticClass: "fas fa-power-off" }),
+                          ]),
+                      _vm._v(" Архивтау\n                "),
+                    ]
+                  ),
                   _vm._v(" "),
                   _c(
                     "button",
@@ -13583,7 +13681,7 @@ var render = function () {
                         attrs: { type: "submit" },
                       },
                       [
-                        _vm.loading
+                        _vm.loading.update
                           ? _c("span", {
                               staticClass: "spinner-border spinner-border-sm",
                               attrs: { role: "status", "aria-hidden": "true" },
@@ -13642,15 +13740,6 @@ var staticRenderFns = [
           _vm._v(" Қызмет түрлері"),
         ]),
       ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("button", { staticClass: "btn btn-secondary btn-sm" }, [
-      _c("i", { staticClass: "fas fa-power-off" }),
-      _vm._v(" Архивтау"),
     ])
   },
 ]
@@ -13678,7 +13767,7 @@ var render = function () {
   return _c("div", [
     _vm.pageIsLoading
       ? _c("div", { staticClass: "d-flex justify-content-center" }, [_vm._m(0)])
-      : _c("table", { staticClass: "table table-bordered" }, [
+      : _c("table", { staticClass: "table table-bordered mb-0" }, [
           _c("caption", [_vm._v("Тізімде бүкіл активты курстар")]),
           _vm._v(" "),
           _vm._m(1),
@@ -13964,8 +14053,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("button", { staticClass: "btn btn-secondary btn-sm" }, [
-      _c("i", { staticClass: "fas fa-power-off" }),
+    return _c("button", { staticClass: "btn btn-success btn-sm" }, [
+      _c("i", { staticClass: "fas fa-arrow-circle-up" }),
       _vm._v(" Активтау"),
     ])
   },
@@ -14470,41 +14559,45 @@ var render = function () {
     _vm._v(" "),
     _vm._m(1),
     _vm._v(" "),
-    _vm._m(2),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "tab-content mb-4", attrs: { id: "myTabContent" } },
-      [
+    _c("div", { staticClass: "card mb-4" }, [
+      _vm._m(2),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
         _c(
           "div",
-          {
-            staticClass: "tab-pane fade show active",
-            attrs: {
-              id: "active-courses",
-              role: "tabpanel",
-              "aria-labelledby": "home-tab",
-            },
-          },
-          [_c("ActiveCourses")],
-          1
+          { staticClass: "tab-content", attrs: { id: "myTabContent" } },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "tab-pane fade show active",
+                attrs: {
+                  id: "active-courses",
+                  role: "tabpanel",
+                  "aria-labelledby": "home-tab",
+                },
+              },
+              [_c("ActiveCourses")],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "tab-pane fade",
+                attrs: {
+                  id: "archive-courses",
+                  role: "tabpanel",
+                  "aria-labelledby": "profile-tab",
+                },
+              },
+              [_c("ArchiveCourses")],
+              1
+            ),
+          ]
         ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "tab-pane fade",
-            attrs: {
-              id: "archive-courses",
-              role: "tabpanel",
-              "aria-labelledby": "profile-tab",
-            },
-          },
-          [_c("ArchiveCourses")],
-          1
-        ),
-      ]
-    ),
+      ]),
+    ]),
     _vm._v(" "),
     _c(
       "div",
@@ -14737,49 +14830,70 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "ul",
-      { staticClass: "nav nav-tabs", attrs: { id: "myTab", role: "tablist" } },
-      [
-        _c("li", { staticClass: "nav-item", attrs: { role: "presentation" } }, [
+    return _c("div", { staticClass: "card-header" }, [
+      _c(
+        "ul",
+        {
+          staticClass: "nav nav-tabs card-header-tabs",
+          attrs: { id: "myTab", role: "tablist" },
+        },
+        [
           _c(
-            "button",
-            {
-              staticClass: "nav-link active",
-              attrs: {
-                id: "home-tab",
-                "data-bs-toggle": "tab",
-                "data-bs-target": "#active-courses",
-                type: "button",
-                role: "tab",
-                "aria-controls": "home",
-                "aria-selected": "true",
-              },
-            },
-            [_vm._v("\n                Активный курстар\n            ")]
+            "li",
+            { staticClass: "nav-item", attrs: { role: "presentation" } },
+            [
+              _c(
+                "button",
+                {
+                  staticClass: "nav-link active",
+                  attrs: {
+                    id: "home-tab",
+                    "data-bs-toggle": "tab",
+                    "data-bs-target": "#active-courses",
+                    type: "button",
+                    role: "tab",
+                    "aria-controls": "home",
+                    "aria-selected": "true",
+                  },
+                },
+                [
+                  _vm._v(
+                    "\n                        Активный курстар\n                    "
+                  ),
+                ]
+              ),
+            ]
           ),
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "nav-item", attrs: { role: "presentation" } }, [
+          _vm._v(" "),
           _c(
-            "button",
-            {
-              staticClass: "nav-link",
-              attrs: {
-                id: "profile-tab",
-                "data-bs-toggle": "tab",
-                "data-bs-target": "#archive-courses",
-                type: "button",
-                role: "tab",
-                "aria-controls": "profile",
-                "aria-selected": "false",
-              },
-            },
-            [_vm._v("\n                Архивный курстар\n            ")]
+            "li",
+            { staticClass: "nav-item", attrs: { role: "presentation" } },
+            [
+              _c(
+                "button",
+                {
+                  staticClass: "nav-link",
+                  attrs: {
+                    id: "profile-tab",
+                    "data-bs-toggle": "tab",
+                    "data-bs-target": "#archive-courses",
+                    type: "button",
+                    role: "tab",
+                    "aria-controls": "profile",
+                    "aria-selected": "false",
+                  },
+                },
+                [
+                  _vm._v(
+                    "\n                        Архивный курстар\n                    "
+                  ),
+                ]
+              ),
+            ]
           ),
-        ]),
-      ]
-    )
+        ]
+      ),
+    ])
   },
 ]
 render._withStripped = true
@@ -32767,16 +32881,78 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _services_course_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./services/course_service */ "./resources/js/services/course_service.js");
+function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("Cannot destructure undefined"); }
+
+
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 /* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
     apiURL: 'http://127.0.0.1:8000/api',
-    serverPath: 'http://localhost:8000'
+    serverPath: 'http://localhost:8000',
+    activeCourses: [],
+    archiveCourses: [],
+    teachers: []
   },
-  mutations: {},
-  actions: {}
+  mutations: {
+    SET_ACTIVE_COURSES: function SET_ACTIVE_COURSES(state, payload) {
+      state.activeCourses = payload;
+    },
+    SET_ARCHIVE_COURSES: function SET_ARCHIVE_COURSES(state, payload) {
+      state.archiveCourses = payload;
+    },
+    CREATE_COURSE: function CREATE_COURSE(state, payload) {
+      state.activeCourses.unshift(payload);
+    },
+    DELETE_COURSE: function DELETE_COURSE(state, id) {
+      state.activeCourses = state.activeCourses.filter(function (obj) {
+        return obj.id != id;
+      });
+    },
+    UPDATE_ACTIVE_COURSE: function UPDATE_ACTIVE_COURSE(state, response) {
+      state.activeCourses.map(function (course) {
+        if (course.id == response.id) {
+          for (var key in response) {
+            course[key] = response[key];
+          }
+        }
+      });
+    },
+    ARCHIVE_COURSE: function ARCHIVE_COURSE(state, response) {
+      console.log(response, 'mutations');
+      state.archiveCourses.unshift(response);
+      state.activeCourses = state.activeCourses.filter(function (obj) {
+        return obj.id != response.id;
+      });
+    }
+  },
+  actions: {
+    getActiveCourses: function getActiveCourses() {
+      return _services_course_service__WEBPACK_IMPORTED_MODULE_2__["loadCourses"]();
+    },
+    getArchiveCourses: function getArchiveCourses() {
+      return _services_course_service__WEBPACK_IMPORTED_MODULE_2__["loadCourses"]({
+        is_active: 0
+      });
+    },
+    createCourse: function createCourse(_ref, data) {
+      _objectDestructuringEmpty(_ref);
+
+      return _services_course_service__WEBPACK_IMPORTED_MODULE_2__["createCourse"](data);
+    },
+    deleteCourse: function deleteCourse(_ref2, id) {
+      _objectDestructuringEmpty(_ref2);
+
+      return _services_course_service__WEBPACK_IMPORTED_MODULE_2__["deleteCourse"](id);
+    },
+    updateCourse: function updateCourse(_ref3, data) {
+      _objectDestructuringEmpty(_ref3);
+
+      return _services_course_service__WEBPACK_IMPORTED_MODULE_2__["updateCourse"](data.id, data.formData);
+    }
+  }
 }));
 
 /***/ }),

@@ -5,7 +5,7 @@
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
-        <table v-else class="table table-bordered">
+        <table v-else class="table table-bordered mb-0">
             <caption>Тізімде бүкіл активты курстар</caption>
             <thead class="table-light">
             <tr>
@@ -28,7 +28,7 @@
                 <td>505</td>
                 <td>
                     <button v-on:click="editCourse(course)" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өзгерту"><i class="fas fa-edit"></i></button>
-                    <button class="btn btn-secondary btn-sm"><i class="fas fa-power-off"></i> Активтау</button>
+                    <button class="btn btn-success btn-sm"><i class="fas fa-arrow-circle-up"></i> Активтау</button>
                     <button v-on:click="deleteCourse(course)" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өшіру"><i class="fas fa-trash"></i></button>
                 </td>
             </tr>
@@ -73,12 +73,12 @@
 <script>
 import {Modal} from "bootstrap";
 import * as courseService from "../services/course_service";
+import {mapState} from 'vuex'
 
 export default {
     name: "ActiveCourses",
     data() {
         return {
-            coursesList: [],
             editCourseData: {},
             errors: {},
             pageIsLoading: false,
@@ -86,6 +86,9 @@ export default {
             editCourseModal: null
         }
     },
+    computed: mapState({
+        coursesList: 'archiveCourses',
+    }),
     mounted() {
         this.editCourseModal = new Modal(this.$refs.editCourseModal)
         this.pageIsLoading = true
@@ -94,8 +97,8 @@ export default {
     methods: {
         loadCourses: async function () {
             try {
-                const response = await courseService.loadCourses({is_active: 0});
-                this.coursesList = response.data;
+                const response = await this.$store.dispatch('getArchiveCourses');
+                this.$store.commit('SET_ARCHIVE_COURSES', response.data)
             } catch (error) {
                 this.$toast.error('Ощибка с сервером');
             }

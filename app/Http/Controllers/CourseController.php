@@ -15,7 +15,7 @@ class CourseController extends Controller
     public function index(Request $request)
     {
         $isActive = $request->query('is_active', true);
-        $courses = Course::where('is_active', $isActive)->orderBy('created_at', 'desc')->get();
+        $courses = Course::where('is_active', $isActive)->orderBy('updated_at', 'desc')->get();
         return response()->json($courses, 200);
     }
 
@@ -83,13 +83,19 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|min:3',
-        ]);
-
         $course = Course::find($id);
-        $course->name = $request->name;
-        $course->description = $request->description;
+        if ($request->has('name')) {
+            $request->validate([
+                'name' => 'required|min:3',
+            ]);
+            $course->name = $request->name;
+        }
+        if ($request->has('name')) {
+            $course->description = $request->description;
+        }
+        if ($request->has('is_active')) {
+            $course->is_active = $request->is_active;
+        }
 
         if ($course->save()) {
             return response()->json($course, 200);
