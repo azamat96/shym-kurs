@@ -12,9 +12,10 @@ class CourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::where('is_active', true)->orderBy('created_at', 'desc')->get();
+        $isActive = $request->query('is_active', true);
+        $courses = Course::where('is_active', $isActive)->orderBy('created_at', 'desc')->get();
         return response()->json($courses, 200);
     }
 

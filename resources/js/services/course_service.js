@@ -4,8 +4,8 @@ export function createCourse(data) {
     return http().post('/course', data)
 }
 
-export function loadCourses() {
-    return http().get('/course')
+export function loadCourses(params = {}) {
+    return http().get('/course',{params})
 }
 
 export function deleteCourse(id) {

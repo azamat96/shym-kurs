@@ -28,7 +28,7 @@
                 <td>505</td>
                 <td>
                     <button v-on:click="editCourse(course)" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өзгерту"><i class="fas fa-edit"></i></button>
-                    <button class="btn btn-secondary btn-sm"><i class="fas fa-power-off"></i> Архивтау</button>
+                    <button class="btn btn-secondary btn-sm"><i class="fas fa-power-off"></i> Активтау</button>
                     <button v-on:click="deleteCourse(course)" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өшіру"><i class="fas fa-trash"></i></button>
                 </td>
             </tr>
@@ -94,7 +94,7 @@ export default {
     methods: {
         loadCourses: async function () {
             try {
-                const response = await courseService.loadCourses();
+                const response = await courseService.loadCourses({is_active: 0});
                 this.coursesList = response.data;
             } catch (error) {
                 this.$toast.error('Ощибка с сервером');
