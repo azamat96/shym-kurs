@@ -4,6 +4,9 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap';
 import router from './router'
 import store from "./store";
+import ToastMessagePlugin from "./plugins/toast";
+
+Vue.use(ToastMessagePlugin)
 
 new Vue({
     el: '#app',

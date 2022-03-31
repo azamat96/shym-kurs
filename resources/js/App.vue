@@ -9,6 +9,7 @@
                 <main>
                     <router-view></router-view>
                 </main>
+                <ToastMessage/>
                 <Footer/>
             </div>
         </div>
@@ -19,10 +20,11 @@
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import Footer from "./components/Footer";
+import ToastMessage from "./components/ToastMessage";
 
 export default {
     components: {
-        Header,Sidebar,Footer
+        Header,Sidebar,Footer, ToastMessage
     }
 }
 </script>

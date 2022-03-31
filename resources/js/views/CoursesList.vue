@@ -12,10 +12,14 @@
         </ol>
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Активный курстар</button>
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
+                    Активный курстар
+                </button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Архивный курстар</button>
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
+                    Архивный курстар
+                </button>
             </li>
         </ul>
         <div class="tab-content mb-4" id="myTabContent">
@@ -161,25 +165,7 @@
                 </div>
             </div>
         </div>
-        <!-- Toast Message -->
-        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1060">
-            <div ref="toastOk" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        <i class="fas fa-check-circle"></i> Жасалынған өзгерістер орындалды
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-            </div>
-            <div ref="toastErr" class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        <i class="fas fa-exclamation-triangle"></i> Ощибка с сервером
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-            </div>
-        </div>
+
 
     </div>
 </template>
@@ -200,18 +186,12 @@ export default {
             },
             editCourseData: {},
             errors: {},
-            toast: {
-                ok: null,
-                err: null
-            },
             loading: false,
             createCourseModal: null,
             editCourseModal: null
         }
     },
     mounted() {
-        this.toast.ok = new Toast(this.$refs.toastOk)
-        this.toast.err = new Toast(this.$refs.toastErr)
         this.createCourseModal = new Modal(this.$refs.createCourseModal)
         this.editCourseModal = new Modal(this.$refs.editCourseModal)
         this.loadCourses()
@@ -222,7 +202,7 @@ export default {
                 const response = await courseService.loadCourses();
                 this.coursesList = response.data;
             } catch (error) {
-                this.toast.err.show()
+                this.$toast.error('Ощибка с сервером');
             }
         },
         createCourse: async function() {
@@ -236,14 +216,14 @@ export default {
                 this.coursesList.unshift(response.data)
                 this.errors = {}
                 this.createCourseModal.hide()
-                this.toast.ok.show()
+                this.$toast.success('Жасалынған өзгерістер орындалды');
             } catch (error) {
                 switch (error.response.status) {
                     case 422:
                         this.errors = error.response.data.errors;
                         break;
                     default:
-                        this.toast.err.show()
+                        this.$toast.error('Ощибка с сервером');
                         break;
                 }
             }
@@ -259,7 +239,7 @@ export default {
                     return obj.id != course.id;
                 });
             } catch (error) {
-                this.toast.err.show()
+                this.$toast.error('Ощибка с сервером');
             }
         },
         editCourse(course) {
@@ -284,10 +264,9 @@ export default {
                 })
                 this.errors = {}
                 this.editCourseModal.hide()
-                // TODO toast отдельный компоненентке шгару керек toast.show('Ok message')
-                this.toast.ok.show()
+                this.$toast.success('Жасалынған өзгерістер орындалды');
             } catch (error) {
-                this.toast.err.show()
+                this.$toast.error('Ощибка с сервером');
             }
             this.loading = false
         }

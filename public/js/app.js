@@ -5063,6 +5063,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Header__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/Header */ "./resources/js/components/Header.vue");
 /* harmony import */ var _components_Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Sidebar */ "./resources/js/components/Sidebar.vue");
 /* harmony import */ var _components_Footer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Footer */ "./resources/js/components/Footer.vue");
+/* harmony import */ var _components_ToastMessage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/ToastMessage */ "./resources/js/components/ToastMessage.vue");
 //
 //
 //
@@ -5080,6 +5081,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
 
 
 
@@ -5087,7 +5090,8 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     Header: _components_Header__WEBPACK_IMPORTED_MODULE_0__["default"],
     Sidebar: _components_Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"],
-    Footer: _components_Footer__WEBPACK_IMPORTED_MODULE_2__["default"]
+    Footer: _components_Footer__WEBPACK_IMPORTED_MODULE_2__["default"],
+    ToastMessage: _components_ToastMessage__WEBPACK_IMPORTED_MODULE_3__["default"]
   }
 });
 
@@ -5211,6 +5215,87 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Sidebar"
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ToastMessage.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ToastMessage.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
+/* harmony import */ var _plugins_eventbus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../plugins/eventbus */ "./resources/js/plugins/eventbus.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "ToastMessage",
+  data: function data() {
+    return {
+      // TODO сделать массивом уведомлении, а то просто show/hide
+      success: {
+        toast: null,
+        message: ''
+      },
+      error: {
+        toast: null,
+        message: 'Ощибка с сервером'
+      }
+    };
+  },
+  created: function created() {
+    // start listening for "toast-message" channel's events
+    _plugins_eventbus__WEBPACK_IMPORTED_MODULE_1__["EventBus"].$on("toast-message", this.handleMessageEvent);
+  },
+  mounted: function mounted() {
+    this.success.toast = new bootstrap__WEBPACK_IMPORTED_MODULE_0__["Toast"](this.$refs.toastOk);
+    this.error.toast = new bootstrap__WEBPACK_IMPORTED_MODULE_0__["Toast"](this.$refs.toastErr);
+  },
+  methods: {
+    handleMessageEvent: function handleMessageEvent(payload) {
+      if (payload.message) {
+        this.showMessage(payload.message, payload.type, payload.options);
+      }
+    },
+    showMessage: function showMessage(message, type) {
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+      if (type === "success") {
+        this.success.toast.show();
+        this.success.message = message;
+      }
+
+      if (type === "error") {
+        this.error.toast.show();
+        this.error.message = message;
+      }
+    }
+  }
 });
 
 /***/ }),
@@ -5442,20 +5527,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -5470,18 +5541,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       },
       editCourseData: {},
       errors: {},
-      toast: {
-        ok: null,
-        err: null
-      },
       loading: false,
       createCourseModal: null,
       editCourseModal: null
     };
   },
   mounted: function mounted() {
-    this.toast.ok = new bootstrap__WEBPACK_IMPORTED_MODULE_2__["Toast"](this.$refs.toastOk);
-    this.toast.err = new bootstrap__WEBPACK_IMPORTED_MODULE_2__["Toast"](this.$refs.toastErr);
     this.createCourseModal = new bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"](this.$refs.createCourseModal);
     this.editCourseModal = new bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"](this.$refs.editCourseModal);
     this.loadCourses();
@@ -5507,7 +5572,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 7:
                 _context.prev = 7;
                 _context.t0 = _context["catch"](0);
-                this.toast.err.show();
+                this.$toast.error('Ощибка с сервером');
 
               case 10:
               case "end":
@@ -5543,7 +5608,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 this.coursesList.unshift(response.data);
                 this.errors = {};
                 this.createCourseModal.hide();
-                this.toast.ok.show();
+                this.$toast.success('Жасалынған өзгерістер орындалды');
                 _context2.next = 23;
                 break;
 
@@ -5559,7 +5624,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context2.abrupt("break", 23);
 
               case 21:
-                this.toast.err.show();
+                this.$toast.error('Ощибка с сервером');
                 return _context2.abrupt("break", 23);
 
               case 23:
@@ -5607,7 +5672,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 8:
                 _context3.prev = 8;
                 _context3.t0 = _context3["catch"](2);
-                this.toast.err.show();
+                this.$toast.error('Ощибка с сервером');
 
               case 11:
               case "end":
@@ -5653,16 +5718,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   }
                 });
                 this.errors = {};
-                this.editCourseModal.hide(); // TODO toast отдельный компоненентке шгару керек toast.show('Ok message')
-
-                this.toast.ok.show();
+                this.editCourseModal.hide();
+                this.$toast.success('Жасалынған өзгерістер орындалды');
                 _context4.next = 18;
                 break;
 
               case 15:
                 _context4.prev = 15;
                 _context4.t0 = _context4["catch"](1);
-                this.toast.err.show();
+                this.$toast.error('Ощибка с сервером');
 
               case 18:
                 this.loading = false;
@@ -12976,7 +13040,13 @@ var render = function () {
           _c(
             "div",
             { attrs: { id: "layoutSidenav_content" } },
-            [_c("main", [_c("router-view")], 1), _vm._v(" "), _c("Footer")],
+            [
+              _c("main", [_c("router-view")], 1),
+              _vm._v(" "),
+              _c("ToastMessage"),
+              _vm._v(" "),
+              _c("Footer"),
+            ],
             1
           ),
         ],
@@ -13317,6 +13387,99 @@ var staticRenderFns = [
     ])
   },
 ]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ToastMessage.vue?vue&type=template&id=066ac86a&scoped=true&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ToastMessage.vue?vue&type=template&id=066ac86a&scoped=true& ***!
+  \***************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      ref: "toastMsg",
+      staticClass: "position-fixed top-0 end-0 p-3 toast-container",
+      staticStyle: { "z-index": "1060" },
+    },
+    [
+      _c(
+        "div",
+        {
+          ref: "toastOk",
+          staticClass:
+            "toast align-items-center text-white bg-success border-0",
+          attrs: {
+            role: "alert",
+            "aria-live": "assertive",
+            "aria-atomic": "true",
+          },
+        },
+        [
+          _c("div", { staticClass: "d-flex" }, [
+            _c("div", { staticClass: "toast-body" }, [
+              _c("i", { staticClass: "fas fa-check-circle" }),
+              _vm._v(" " + _vm._s(_vm.success.message) + "\n            "),
+            ]),
+            _vm._v(" "),
+            _c("button", {
+              staticClass: "btn-close btn-close-white me-2 m-auto",
+              attrs: {
+                type: "button",
+                "data-bs-dismiss": "toast",
+                "aria-label": "Close",
+              },
+            }),
+          ]),
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          ref: "toastErr",
+          staticClass: "toast align-items-center text-white bg-danger border-0",
+          attrs: {
+            role: "alert",
+            "aria-live": "assertive",
+            "aria-atomic": "true",
+          },
+        },
+        [
+          _c("div", { staticClass: "d-flex" }, [
+            _c("div", { staticClass: "toast-body" }, [
+              _c("i", { staticClass: "fas fa-exclamation-triangle" }),
+              _vm._v(" " + _vm._s(_vm.error.message) + "\n            "),
+            ]),
+            _vm._v(" "),
+            _c("button", {
+              staticClass: "btn-close btn-close-white me-2 m-auto",
+              attrs: {
+                type: "button",
+                "data-bs-dismiss": "toast",
+                "aria-label": "Close",
+              },
+            }),
+          ]),
+        ]
+      ),
+    ]
+  )
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -13851,45 +14014,6 @@ var render = function () {
         ]),
       ]
     ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "position-fixed top-0 end-0 p-3",
-        staticStyle: { "z-index": "1060" },
-      },
-      [
-        _c(
-          "div",
-          {
-            ref: "toastOk",
-            staticClass:
-              "toast align-items-center text-white bg-success border-0",
-            attrs: {
-              role: "alert",
-              "aria-live": "assertive",
-              "aria-atomic": "true",
-            },
-          },
-          [_vm._m(6)]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            ref: "toastErr",
-            staticClass:
-              "toast align-items-center text-white bg-danger border-0",
-            attrs: {
-              role: "alert",
-              "aria-live": "assertive",
-              "aria-atomic": "true",
-            },
-          },
-          [_vm._m(7)]
-        ),
-      ]
-    ),
   ])
 }
 var staticRenderFns = [
@@ -13957,7 +14081,7 @@ var staticRenderFns = [
                 "aria-selected": "true",
               },
             },
-            [_vm._v("Активный курстар")]
+            [_vm._v("\n                Активный курстар\n            ")]
           ),
         ]),
         _vm._v(" "),
@@ -13976,7 +14100,7 @@ var staticRenderFns = [
                 "aria-selected": "false",
               },
             },
-            [_vm._v("Архивный курстар")]
+            [_vm._v("\n                Архивный курстар\n            ")]
           ),
         ]),
       ]
@@ -14100,46 +14224,6 @@ var staticRenderFns = [
         ]),
       ]
     )
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "d-flex" }, [
-      _c("div", { staticClass: "toast-body" }, [
-        _c("i", { staticClass: "fas fa-check-circle" }),
-        _vm._v(" Жасалынған өзгерістер орындалды\n                "),
-      ]),
-      _vm._v(" "),
-      _c("button", {
-        staticClass: "btn-close btn-close-white me-2 m-auto",
-        attrs: {
-          type: "button",
-          "data-bs-dismiss": "toast",
-          "aria-label": "Close",
-        },
-      }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "d-flex" }, [
-      _c("div", { staticClass: "toast-body" }, [
-        _c("i", { staticClass: "fas fa-exclamation-triangle" }),
-        _vm._v(" Ощибка с сервером\n                "),
-      ]),
-      _vm._v(" "),
-      _c("button", {
-        staticClass: "btn-close btn-close-white me-2 m-auto",
-        attrs: {
-          type: "button",
-          "data-bs-dismiss": "toast",
-          "aria-label": "Close",
-        },
-      }),
-    ])
   },
 ]
 render._withStripped = true
@@ -31524,12 +31608,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
 /* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./router */ "./resources/js/router.js");
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./store */ "./resources/js/store.js");
+/* harmony import */ var _plugins_toast__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./plugins/toast */ "./resources/js/plugins/toast.js");
 
 
 
 
 
 
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(_plugins_toast__WEBPACK_IMPORTED_MODULE_6__["default"]);
 new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app',
   router: _router__WEBPACK_IMPORTED_MODULE_4__["default"],
@@ -31745,6 +31832,128 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Sidebar_vue_vue_type_template_id_81fbb27e_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/components/ToastMessage.vue":
+/*!**************************************************!*\
+  !*** ./resources/js/components/ToastMessage.vue ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ToastMessage_vue_vue_type_template_id_066ac86a_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ToastMessage.vue?vue&type=template&id=066ac86a&scoped=true& */ "./resources/js/components/ToastMessage.vue?vue&type=template&id=066ac86a&scoped=true&");
+/* harmony import */ var _ToastMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ToastMessage.vue?vue&type=script&lang=js& */ "./resources/js/components/ToastMessage.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ToastMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ToastMessage_vue_vue_type_template_id_066ac86a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ToastMessage_vue_vue_type_template_id_066ac86a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "066ac86a",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/ToastMessage.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/ToastMessage.vue?vue&type=script&lang=js&":
+/*!***************************************************************************!*\
+  !*** ./resources/js/components/ToastMessage.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ToastMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./ToastMessage.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ToastMessage.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ToastMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/ToastMessage.vue?vue&type=template&id=066ac86a&scoped=true&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/ToastMessage.vue?vue&type=template&id=066ac86a&scoped=true& ***!
+  \*********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ToastMessage_vue_vue_type_template_id_066ac86a_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./ToastMessage.vue?vue&type=template&id=066ac86a&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ToastMessage.vue?vue&type=template&id=066ac86a&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ToastMessage_vue_vue_type_template_id_066ac86a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ToastMessage_vue_vue_type_template_id_066ac86a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/plugins/eventbus.js":
+/*!******************************************!*\
+  !*** ./resources/js/plugins/eventbus.js ***!
+  \******************************************/
+/*! exports provided: EventBus */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventBus", function() { return EventBus; });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+
+var EventBus = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
+
+/***/ }),
+
+/***/ "./resources/js/plugins/toast.js":
+/*!***************************************!*\
+  !*** ./resources/js/plugins/toast.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _eventbus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./eventbus */ "./resources/js/plugins/eventbus.js");
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  // called by Vue.use(FirstPlugin)
+  install: function install(Vue) {
+    Vue.prototype.$toast = {
+      send: function send(message, type, options) {
+        _eventbus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit("toast-message", {
+          message: message,
+          type: type,
+          options: options
+        });
+      },
+      success: function success(message) {
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+        this.send(message, "success", options);
+      },
+      error: function error(message) {
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+        this.send(message, "error", options);
+      }
+    };
+  }
+});
 
 /***/ }),
 
