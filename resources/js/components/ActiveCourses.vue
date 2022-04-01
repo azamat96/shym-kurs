@@ -75,7 +75,6 @@
 
 <script>
 import {Modal} from "bootstrap";
-import * as courseService from "../services/course_service";
 import {mapState} from 'vuex'
 
 export default {
@@ -116,7 +115,8 @@ export default {
             }
             try {
                 await this.$store.dispatch('deleteCourse', course.id);
-                this.$store.commit('DELETE_COURSE', course.id)
+                this.$store.commit('DELETE_ACTIVE_COURSE', course.id)
+                this.$toast.success(`"${course.name}" курсы өшірілді`);
             } catch (error) {
                 this.$toast.error('Ощибка с сервером');
             }
@@ -159,7 +159,7 @@ export default {
 
                 this.$toast.success(`Курс "${response.data.name}" архивқа жіберілінді`);
             } catch (error) {
-                this.$toast.error('Серверде қателіктері');
+                this.$toast.error('Серверде қателіктер');
             }
             this.loading.archive = false
         }

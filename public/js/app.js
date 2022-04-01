@@ -5109,8 +5109,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
-/* harmony import */ var _services_course_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/course_service */ "./resources/js/services/course_service.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -5200,7 +5199,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 
 
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ActiveCourses",
   data: function data() {
@@ -5215,7 +5213,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       editCourseModal: null
     };
   },
-  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapState"])({
+  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapState"])({
     coursesList: 'activeCourses'
   }),
   mounted: function mounted() {
@@ -5282,21 +5280,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return this.$store.dispatch('deleteCourse', course.id);
 
               case 5:
-                this.$store.commit('DELETE_COURSE', course.id);
-                _context2.next = 11;
+                this.$store.commit('DELETE_ACTIVE_COURSE', course.id);
+                this.$toast.success("\"".concat(course.name, "\" \u043A\u0443\u0440\u0441\u044B \u04E9\u0448\u0456\u0440\u0456\u043B\u0434\u0456"));
+                _context2.next = 12;
                 break;
 
-              case 8:
-                _context2.prev = 8;
+              case 9:
+                _context2.prev = 9;
                 _context2.t0 = _context2["catch"](2);
                 this.$toast.error('Ощибка с сервером');
 
-              case 11:
+              case 12:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[2, 8]]);
+        }, _callee2, this, [[2, 9]]);
       }));
 
       function deleteCourse(_x) {
@@ -5396,7 +5395,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 15:
                 _context4.prev = 15;
                 _context4.t0 = _context4["catch"](3);
-                this.$toast.error('Серверде қателіктері');
+                this.$toast.error('Серверде қателіктер');
 
               case 18:
                 this.loading.archive = false;
@@ -5432,8 +5431,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
-/* harmony import */ var _services_course_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/course_service */ "./resources/js/services/course_service.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -5518,7 +5516,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -5527,17 +5527,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {
       editCourseData: {},
       errors: {},
-      pageIsLoading: false,
-      loading: false,
+      loading: {
+        page: false,
+        update: false,
+        activate: false
+      },
       editCourseModal: null
     };
   },
-  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapState"])({
+  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapState"])({
     coursesList: 'archiveCourses'
   }),
   mounted: function mounted() {
     this.editCourseModal = new bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"](this.$refs.editCourseModal);
-    this.pageIsLoading = true;
     this.loadCourses();
   },
   methods: {
@@ -5548,30 +5550,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.prev = 0;
-                _context.next = 3;
+                this.loading.page = true;
+                _context.prev = 1;
+                _context.next = 4;
                 return this.$store.dispatch('getArchiveCourses');
 
-              case 3:
+              case 4:
                 response = _context.sent;
                 this.$store.commit('SET_ARCHIVE_COURSES', response.data);
-                _context.next = 10;
+                _context.next = 11;
                 break;
 
-              case 7:
-                _context.prev = 7;
-                _context.t0 = _context["catch"](0);
-                this.$toast.error('Ощибка с сервером');
-
-              case 10:
-                this.pageIsLoading = false;
+              case 8:
+                _context.prev = 8;
+                _context.t0 = _context["catch"](1);
+                this.$toast.error('Серверде қателіктер');
 
               case 11:
+                this.loading.page = false;
+
+              case 12:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[0, 7]]);
+        }, _callee, this, [[1, 8]]);
       }));
 
       function loadCourses() {
@@ -5596,26 +5599,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 2:
                 _context2.prev = 2;
                 _context2.next = 5;
-                return _services_course_service__WEBPACK_IMPORTED_MODULE_2__["deleteCourse"](course.id);
+                return this.$store.dispatch('deleteCourse', course.id);
 
               case 5:
-                this.coursesList = this.coursesList.filter(function (obj) {
-                  return obj.id != course.id;
-                });
-                _context2.next = 11;
+                this.$store.commit('DELETE_ARCHIVE_COURSE', course.id);
+                this.$toast.success("\"".concat(course.name, "\" \u043A\u0443\u0440\u0441\u044B \u04E9\u0448\u0456\u0440\u0456\u043B\u0434\u0456"));
+                _context2.next = 12;
                 break;
 
-              case 8:
-                _context2.prev = 8;
+              case 9:
+                _context2.prev = 9;
                 _context2.t0 = _context2["catch"](2);
-                this.$toast.error('Ощибка с сервером');
+                this.$toast.error('Серверде қателіктер');
 
-              case 11:
+              case 12:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[2, 8]]);
+        }, _callee2, this, [[2, 9]]);
       }));
 
       function deleteCourse(_x) {
@@ -5635,24 +5637,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                this.loading = true;
+                this.loading.update = true;
                 _context3.prev = 1;
                 formData = new FormData();
                 formData.append('name', this.editCourseData.name);
                 formData.append('description', this.editCourseData.description);
                 formData.append('_method', 'put');
                 _context3.next = 8;
-                return _services_course_service__WEBPACK_IMPORTED_MODULE_2__["updateCourse"](this.editCourseData.id, formData);
+                return this.$store.dispatch('updateCourse', {
+                  id: this.editCourseData.id,
+                  formData: formData
+                });
 
               case 8:
                 response = _context3.sent;
-                this.coursesList.map(function (course) {
-                  if (course.id == response.data.id) {
-                    for (var key in response.data) {
-                      course[key] = response.data[key];
-                    }
-                  }
-                });
+                this.$store.commit('UPDATE_ARCHIVE_COURSE', response.data);
                 this.errors = {};
                 this.editCourseModal.hide();
                 this.$toast.success('Жасалынған өзгерістер орындалды');
@@ -5662,10 +5661,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 15:
                 _context3.prev = 15;
                 _context3.t0 = _context3["catch"](1);
-                this.$toast.error('Ощибка с сервером');
+                this.$toast.error('Серверде қателіктер');
 
               case 18:
-                this.loading = false;
+                this.loading.update = false;
 
               case 19:
               case "end":
@@ -5680,6 +5679,61 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return updateCourse;
+    }(),
+    activateCourse: function () {
+      var _activateCourse = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(course, index) {
+        var formData, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                if (window.confirm("\u0421\u0456\u0437 \"".concat(course.name, "\" \u043A\u0443\u0440\u0441\u044B\u043D \u0430\u043A\u0442\u0438\u0432\u0442\u0430\u0493\u044B\u04A3\u044B\u0437 \u043A\u0435\u043B\u0435\u0434\u0456 \u043C\u0435?"))) {
+                  _context4.next = 2;
+                  break;
+                }
+
+                return _context4.abrupt("return");
+
+              case 2:
+                this.loading.activate = index;
+                _context4.prev = 3;
+                formData = new FormData();
+                formData.append('is_active', 1);
+                formData.append('_method', 'put');
+                _context4.next = 9;
+                return this.$store.dispatch('updateCourse', {
+                  id: course.id,
+                  formData: formData
+                });
+
+              case 9:
+                response = _context4.sent;
+                this.$store.commit('ACTIVATE_COURSE', response.data);
+                this.$toast.success("\u041A\u0443\u0440\u0441 \"".concat(response.data.name, "\" \u0430\u043A\u0442\u0438\u0432\u0442\u0430\u043B\u044B\u043D\u0434\u044B"));
+                _context4.next = 17;
+                break;
+
+              case 14:
+                _context4.prev = 14;
+                _context4.t0 = _context4["catch"](3);
+                this.$toast.error('Серверде қателіктер');
+
+              case 17:
+                this.loading.activate = false;
+
+              case 18:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this, [[3, 14]]);
+      }));
+
+      function activateCourse(_x2, _x3) {
+        return _activateCourse.apply(this, arguments);
+      }
+
+      return activateCourse;
     }()
   }
 });
@@ -13765,10 +13819,18 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm.pageIsLoading
+    _vm.loading.page
       ? _c("div", { staticClass: "d-flex justify-content-center" }, [_vm._m(0)])
       : _c("table", { staticClass: "table table-bordered mb-0" }, [
-          _c("caption", [_vm._v("Тізімде бүкіл активты курстар")]),
+          _c("caption", [
+            _vm._v(
+              _vm._s(
+                _vm.coursesList.length > 0
+                  ? "Тізімде бүкіл архивты курстар"
+                  : "Архивты курстар жоқ"
+              )
+            ),
+          ]),
           _vm._v(" "),
           _vm._m(1),
           _vm._v(" "),
@@ -13807,7 +13869,28 @@ var render = function () {
                     [_c("i", { staticClass: "fas fa-edit" })]
                   ),
                   _vm._v(" "),
-                  _vm._m(2, true),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success btn-sm",
+                      on: {
+                        click: function ($event) {
+                          return _vm.activateCourse(course, index)
+                        },
+                      },
+                    },
+                    [
+                      _vm.loading.activate === index
+                        ? _c("span", {
+                            staticClass: "spinner-border spinner-border-sm",
+                            attrs: { role: "status", "aria-hidden": "true" },
+                          })
+                        : _c("span", [
+                            _c("i", { staticClass: "fas fa-arrow-circle-up" }),
+                          ]),
+                      _vm._v(" Активтау\n                "),
+                    ]
+                  ),
                   _vm._v(" "),
                   _c(
                     "button",
@@ -13988,7 +14071,7 @@ var render = function () {
                         attrs: { type: "submit" },
                       },
                       [
-                        _vm.loading
+                        _vm.loading.update
                           ? _c("span", {
                               staticClass: "spinner-border spinner-border-sm",
                               attrs: { role: "status", "aria-hidden": "true" },
@@ -14047,15 +14130,6 @@ var staticRenderFns = [
           _vm._v(" Қызмет түрлері"),
         ]),
       ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("button", { staticClass: "btn btn-success btn-sm" }, [
-      _c("i", { staticClass: "fas fa-arrow-circle-up" }),
-      _vm._v(" Активтау"),
     ])
   },
 ]
@@ -32906,8 +32980,13 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
     CREATE_COURSE: function CREATE_COURSE(state, payload) {
       state.activeCourses.unshift(payload);
     },
-    DELETE_COURSE: function DELETE_COURSE(state, id) {
+    DELETE_ACTIVE_COURSE: function DELETE_ACTIVE_COURSE(state, id) {
       state.activeCourses = state.activeCourses.filter(function (obj) {
+        return obj.id != id;
+      });
+    },
+    DELETE_ARCHIVE_COURSE: function DELETE_ARCHIVE_COURSE(state, id) {
+      state.archiveCourses = state.archiveCourses.filter(function (obj) {
         return obj.id != id;
       });
     },
@@ -32920,10 +32999,24 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
         }
       });
     },
+    UPDATE_ARCHIVE_COURSE: function UPDATE_ARCHIVE_COURSE(state, response) {
+      state.archiveCourses.map(function (course) {
+        if (course.id == response.id) {
+          for (var key in response) {
+            course[key] = response[key];
+          }
+        }
+      });
+    },
     ARCHIVE_COURSE: function ARCHIVE_COURSE(state, response) {
-      console.log(response, 'mutations');
       state.archiveCourses.unshift(response);
       state.activeCourses = state.activeCourses.filter(function (obj) {
+        return obj.id != response.id;
+      });
+    },
+    ACTIVATE_COURSE: function ACTIVATE_COURSE(state, response) {
+      state.activeCourses.unshift(response);
+      state.archiveCourses = state.archiveCourses.filter(function (obj) {
         return obj.id != response.id;
       });
     }

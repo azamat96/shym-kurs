@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div v-if="pageIsLoading" class="d-flex justify-content-center">
+        <div v-if="loading.page" class="d-flex justify-content-center">
             <div class="spinner-border text-primary m-5" style="width: 3rem; height: 3rem;" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
         <table v-else class="table table-bordered mb-0">
-            <caption>Тізімде бүкіл активты курстар</caption>
+            <caption>{{ coursesList.length > 0 ? 'Тізімде бүкіл архивты курстар': 'Архивты курстар жоқ'}}</caption>
             <thead class="table-light">
             <tr>
                 <th>#</th>
@@ -28,7 +28,10 @@
                 <td>505</td>
                 <td>
                     <button v-on:click="editCourse(course)" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өзгерту"><i class="fas fa-edit"></i></button>
-                    <button class="btn btn-success btn-sm"><i class="fas fa-arrow-circle-up"></i> Активтау</button>
+                    <button v-on:click="activateCourse(course, index)" class="btn btn-success btn-sm">
+                        <span v-if="loading.activate === index" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span v-else><i class="fas fa-arrow-circle-up"></i></span> Активтау
+                    </button>
                     <button v-on:click="deleteCourse(course)" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өшіру"><i class="fas fa-trash"></i></button>
                 </td>
             </tr>
@@ -59,7 +62,7 @@
                         <div class="modal-footer justify-content-center">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Жабу</button>
                             <button type="submit" class="btn btn-primary">
-                                <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span v-if="loading.update" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 <span v-else><i class="fas fa-check-circle"></i></span> Курсты өзгерту
                             </button>
                         </div>
@@ -72,7 +75,6 @@
 
 <script>
 import {Modal} from "bootstrap";
-import * as courseService from "../services/course_service";
 import {mapState} from 'vuex'
 
 export default {
@@ -81,8 +83,11 @@ export default {
         return {
             editCourseData: {},
             errors: {},
-            pageIsLoading: false,
-            loading: false,
+            loading: {
+                page: false,
+                update: false,
+                activate: false
+            },
             editCourseModal: null
         }
     },
@@ -91,30 +96,29 @@ export default {
     }),
     mounted() {
         this.editCourseModal = new Modal(this.$refs.editCourseModal)
-        this.pageIsLoading = true
         this.loadCourses()
     },
     methods: {
         loadCourses: async function () {
+            this.loading.page = true
             try {
                 const response = await this.$store.dispatch('getArchiveCourses');
                 this.$store.commit('SET_ARCHIVE_COURSES', response.data)
             } catch (error) {
-                this.$toast.error('Ощибка с сервером');
+                this.$toast.error('Серверде қателіктер');
             }
-            this.pageIsLoading = false
+            this.loading.page = false
         },
         deleteCourse: async function(course) {
             if (!window.confirm(`Сіз шынында да "${course.name}" курсын өшіргіңіз келеді ме?`)) {
                 return;
             }
             try {
-                await courseService.deleteCourse(course.id);
-                this.coursesList = this.coursesList.filter(obj => {
-                    return obj.id != course.id;
-                });
+                await this.$store.dispatch('deleteCourse', course.id);
+                this.$store.commit('DELETE_ARCHIVE_COURSE', course.id)
+                this.$toast.success(`"${course.name}" курсы өшірілді`);
             } catch (error) {
-                this.$toast.error('Ощибка с сервером');
+                this.$toast.error('Серверде қателіктер');
             }
         },
         editCourse(course) {
@@ -122,28 +126,40 @@ export default {
             this.editCourseModal.show()
         },
         updateCourse: async function() {
-            this.loading = true;
+            this.loading.update = true;
             try {
                 const formData = new FormData();
                 formData.append('name', this.editCourseData.name)
                 formData.append('description', this.editCourseData.description)
                 formData.append('_method', 'put')
 
-                const response = await courseService.updateCourse(this.editCourseData.id, formData)
-                this.coursesList.map(course => {
-                    if (course.id == response.data.id) {
-                        for (let key in response.data) {
-                            course[key] = response.data[key]
-                        }
-                    }
-                })
+                const response = await this.$store.dispatch('updateCourse', {id:this.editCourseData.id, formData:formData})
+                this.$store.commit('UPDATE_ARCHIVE_COURSE', response.data)
                 this.errors = {}
                 this.editCourseModal.hide()
                 this.$toast.success('Жасалынған өзгерістер орындалды');
             } catch (error) {
-                this.$toast.error('Ощибка с сервером');
+                this.$toast.error('Серверде қателіктер');
             }
-            this.loading = false
+            this.loading.update = false
+        },
+        activateCourse: async function(course, index) {
+            if (!window.confirm(`Сіз "${course.name}" курсын активтағыңыз келеді ме?`)) {
+                return;
+            }
+            this.loading.activate = index;
+            try {
+                const formData = new FormData();
+                formData.append('is_active', 1)
+                formData.append('_method', 'put')
+
+                const response = await this.$store.dispatch('updateCourse', {id: course.id, formData:formData})
+                this.$store.commit('ACTIVATE_COURSE', response.data)
+                this.$toast.success(`Курс "${response.data.name}" активталынды`);
+            } catch (error) {
+                this.$toast.error('Серверде қателіктер');
+            }
+            this.loading.activate = false
         }
     }
 }

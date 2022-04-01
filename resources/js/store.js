@@ -22,8 +22,13 @@ export default new Vuex.Store({
         CREATE_COURSE(state, payload) {
             state.activeCourses.unshift(payload)
         },
-        DELETE_COURSE(state, id) {
+        DELETE_ACTIVE_COURSE(state, id) {
             state.activeCourses = state.activeCourses.filter(obj => {
+                return obj.id != id;
+            });
+        },
+        DELETE_ARCHIVE_COURSE(state, id) {
+            state.archiveCourses = state.archiveCourses.filter(obj => {
                 return obj.id != id;
             });
         },
@@ -36,10 +41,24 @@ export default new Vuex.Store({
                 }
             })
         },
+        UPDATE_ARCHIVE_COURSE(state, response) {
+            state.archiveCourses.map(course => {
+                if (course.id == response.id) {
+                    for (let key in response) {
+                        course[key] = response[key]
+                    }
+                }
+            })
+        },
         ARCHIVE_COURSE(state, response) {
-            console.log(response, 'mutations')
             state.archiveCourses.unshift(response)
             state.activeCourses = state.activeCourses.filter(obj => {
+                return obj.id != response.id;
+            });
+        },
+        ACTIVATE_COURSE(state, response) {
+            state.activeCourses.unshift(response)
+            state.archiveCourses = state.archiveCourses.filter(obj => {
                 return obj.id != response.id;
             });
         }
