@@ -98,12 +98,13 @@ export default {
     methods: {
         createCourse: async function() {
             this.loading = true
-            let formData = new FormData()
-            formData.append('name', this.newCourse.name)
-            formData.append('description', this.newCourse.description)
+            let query = {
+                name: this.newCourse.name,
+                description: this.newCourse.description
+            }
 
             try {
-                const response = await this.$store.dispatch('createCourse', formData)
+                const response = await this.$store.dispatch('createCourse', query)
                 this.$store.commit('CREATE_COURSE', response.data)
                 this.errors = {}
                 this.createCourseModal.hide()

@@ -77,7 +77,7 @@ export default new Vuex.Store({
             return courseService.deleteCourse(id);
         },
         updateCourse({}, data) {
-            return courseService.updateCourse(data.id, data.formData);
+            return courseService.updateCourse(data.id, data.options);
         },
     }
 })

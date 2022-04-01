@@ -86,7 +86,7 @@ export default {
             loading: {
                 page: false,
                 update: false,
-                activate: false
+                activate: null
             },
             editCourseModal: null
         }
@@ -128,12 +128,12 @@ export default {
         updateCourse: async function() {
             this.loading.update = true;
             try {
-                const formData = new FormData();
-                formData.append('name', this.editCourseData.name)
-                formData.append('description', this.editCourseData.description)
-                formData.append('_method', 'put')
-
-                const response = await this.$store.dispatch('updateCourse', {id:this.editCourseData.id, formData:formData})
+                let query = {
+                    name: this.editCourseData.name,
+                    description: this.editCourseData.description,
+                    _method: 'put'
+                }
+                const response = await this.$store.dispatch('updateCourse', {id:this.editCourseData.id, options: query})
                 this.$store.commit('UPDATE_ARCHIVE_COURSE', response.data)
                 this.errors = {}
                 this.editCourseModal.hide()
@@ -149,11 +149,11 @@ export default {
             }
             this.loading.activate = index;
             try {
-                const formData = new FormData();
-                formData.append('is_active', 1)
-                formData.append('_method', 'put')
-
-                const response = await this.$store.dispatch('updateCourse', {id: course.id, formData:formData})
+                let query = {
+                    is_active: 1,
+                    _method: 'put'
+                }
+                const response = await this.$store.dispatch('updateCourse', {id: course.id, options: query})
                 this.$store.commit('ACTIVATE_COURSE', response.data)
                 this.$toast.success(`Курс "${response.data.name}" активталынды`);
             } catch (error) {
