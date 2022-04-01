@@ -15,12 +15,12 @@
                 <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#active-courses" type="button" role="tab" aria-controls="home" aria-selected="true">
-                            Активный курстар
+                            <i class="fas fa-toggle-on"></i> Активный курстар
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#archive-courses" type="button" role="tab" aria-controls="profile" aria-selected="false">
-                            Архивный курстар
+                            <i class="fas fa-power-off"></i> Архивный курстар
                         </button>
                     </li>
                 </ul>

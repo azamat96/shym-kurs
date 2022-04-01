@@ -1,6 +1,12 @@
 <template>
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Мұғалімдер тізімі</h1>
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="mt-4">Мұғалімдер тізімі</h1>
+            <router-link to="/teacher/add-remove" class="btn btn-primary">
+                <i class="fas fa-plus-circle"></i> Жаңа мұғалім қосу
+            </router-link>
+        </div>
+
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="/">Басты бет</a></li>
             <li class="breadcrumb-item active">Мұғалімдер тізімі</li>
