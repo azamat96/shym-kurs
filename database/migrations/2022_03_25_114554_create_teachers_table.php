@@ -18,6 +18,7 @@ class CreateTeachersTable extends Migration
             $table->string('name');
             $table->date('birth_date');
             $table->string('lang', 50);
+            $table->string('position', 100)->nullable();
             $table->string('stazh');
             $table->text('additional_info')->nullable();
             $table->string('phone');
