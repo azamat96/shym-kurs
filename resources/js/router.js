@@ -19,9 +19,22 @@ const routes = [
         component: TeachersList
     },
     {
-        path: '/teacher/add-remove',
-        name: 'add_teacher',
-        component: AddTeacher
+        path: '/teacher/create',
+        name: 'create_teacher',
+        component: AddTeacher,
+        props: {mode: 'create'}
+    },
+    {
+        path: '/teacher/show/:id',
+        name: 'show_teacher',
+        component: AddTeacher,
+        props: {mode: 'show'}
+    },
+    {
+        path: '/teacher/update/:id',
+        name: 'update_teacher',
+        component: AddTeacher,
+        props: {mode: 'update'}
     },
     {
         path: '/course/list',

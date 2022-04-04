@@ -13,7 +13,7 @@
                             <i class="fas fa-table"></i></div>
                         Мұғалімдер тізімі
                     </router-link>
-                    <router-link to="/teacher/add-remove" class="nav-link" exact>
+                    <router-link to="/teacher/create" class="nav-link" exact>
                         <div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>
                         Мұғалім қосу/өшіру
                     </router-link>
