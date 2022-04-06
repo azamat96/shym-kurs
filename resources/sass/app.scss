@@ -12,3 +12,24 @@
 .hr-line {
     height: 0.5px;
 }
+
+.multiselect {
+    &.is-multiselect-invalid {
+        .multiselect__select:before {
+            border-color: #dc3545 transparent transparent;
+        }
+
+        .multiselect__tags {
+            border-color: #dc3545;
+        }
+    }
+    &.is-multiselect-valid {
+        .multiselect__select:before {
+            border-color: #198754 transparent transparent;
+        }
+
+        .multiselect__tags {
+            border-color: #198754;
+        }
+    }
+}

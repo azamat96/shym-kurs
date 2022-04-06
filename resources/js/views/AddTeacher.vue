@@ -26,19 +26,47 @@
                             <div class="col-md-6">
                                 <div class="mb-2">
                                     <label class="form-label">Аты-жөні</label>
-                                    <input v-model="name" type="text" class="form-control" placeholder="" :disabled="isModeShow">
+                                    <input v-model="name"
+                                           :class="[
+                                               'form-control',
+                                               {'is-invalid': validationOn && !name},
+                                               {'is-valid': validationOn && name}]"
+                                           type="text"
+                                           placeholder=""
+                                           :disabled="isModeShow">
+                                    <div class="invalid-feedback">
+                                        Аты-жөнін толтырыңыз
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-2">
                                     <label class="form-label">Туылған күні</label>
-                                    <input v-model="birthDate" type="date" class="form-control" placeholder="" :disabled="isModeShow">
+                                    <input v-model="birthDate"
+                                           type="date"
+                                           :class="[
+                                               'form-control',
+                                               {'is-invalid': validationOn && !birthDate},
+                                               {'is-valid': validationOn && birthDate}]"
+                                           placeholder="" :disabled="isModeShow">
+                                    <div class="invalid-feedback">
+                                        Туылған күнін көрсетіңіз
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-2">
                                     <label class="form-label">Телефон</label>
-                                    <input v-model="phone" type="text" class="form-control" placeholder="" :disabled="isModeShow">
+                                    <input v-model="phone"
+                                           type="text"
+                                           :class="[
+                                               'form-control',
+                                               {'is-invalid': validationOn && !phone},
+                                               {'is-valid': validationOn && phone}]"
+                                           placeholder="" :disabled="isModeShow">
+                                    <div class="invalid-feedback">
+                                        Телефон номерін жазыңыз
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -56,8 +84,13 @@
                                         :show-labels="false"
                                         :allow-empty="false"
                                         selectLabel="" selectedLabel=""
-                                        :disabled="isModeShow">
+                                        :disabled="isModeShow"
+                                        :class="[{'is-multiselect-invalid': validationOn && !school},
+                                               {'is-multiselect-valid': validationOn && school}]">
                                     </Multiselect>
+                                    <div v-if="validationOn && !school" class="invalid-feedback" style="display: block">
+                                        Мектебін таңдаңыз
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -72,8 +105,13 @@
                                         :show-labels="false"
                                         :allow-empty="false"
                                         selectLabel="" selectedLabel=""
-                                        :disabled="isModeShow">
+                                        :disabled="isModeShow"
+                                        :class="[{'is-multiselect-invalid': validationOn && !subject},
+                                               {'is-multiselect-valid': validationOn && subject}]">
                                     </Multiselect>
+                                    <div v-if="validationOn && !subject" class="invalid-feedback" style="display: block">
+                                        Сабақ жүргізетін пәнін таңдаңыз
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -88,14 +126,28 @@
                                         :show-labels="false"
                                         :allow-empty="false"
                                         selectLabel="" selectedLabel=""
-                                        :disabled="isModeShow">
+                                        :disabled="isModeShow"
+                                        :class="[{'is-multiselect-invalid': validationOn && !lang},
+                                               {'is-multiselect-valid': validationOn && lang}]">
                                     </Multiselect>
+                                    <div v-if="validationOn && !lang" class="invalid-feedback" style="display: block">
+                                        Оқыту тілін таңдаңыз
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-2">
                                     <label class="form-label">Пед-қ еңбек өтілі/стажы</label>
-                                    <input v-model="stazh" type="text" class="form-control" placeholder="" :disabled="isModeShow">
+                                    <input v-model="stazh"
+                                           type="text"
+                                           :class="[
+                                               'form-control',
+                                               {'is-invalid': validationOn && !stazh},
+                                               {'is-valid': validationOn && stazh}]"
+                                           placeholder="" :disabled="isModeShow">
+                                    <div class="invalid-feedback">
+                                        Пед-қ еңбек өтілін жазыңыз
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -116,8 +168,13 @@
                                         :show-labels="false"
                                         :allow-empty="false"
                                         selectLabel="" selectedLabel=""
-                                        :disabled="isModeShow">
+                                        :disabled="isModeShow"
+                                        :class="[{'is-multiselect-invalid': validationOn && !position},
+                                               {'is-multiselect-valid': validationOn && position}]">
                                     </Multiselect>
+                                    <div v-if="validationOn && !position" class="invalid-feedback" style="display: block">
+                                        Мансабын таңдаңыз
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -126,7 +183,9 @@
                                 <span v-if="loading.update" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 <span v-else><i class="fas fa-check-circle"></i></span> Сақтау
                             </button>
-                            <button type="button" class="btn btn-secondary">Артқа қайту</button>
+                            <router-link to="/teacher/list">
+                                <button type="button" class="btn btn-secondary">Тізімге қайта оралу</button>
+                            </router-link>
                         </template>
                         <hr class="hr-line" size="1">
                         Курстар тізімі
@@ -191,7 +250,8 @@ export default {
                 },
             ],
             schoolsList: [],
-            subjectsList: []
+            subjectsList: [],
+            validationOn: false,
         }
     },
     computed: {
@@ -228,7 +288,9 @@ export default {
             }
         },
         saveTeacher: async function() {
-            // TODO Frontend validation
+            if (!this.validation()) {
+                return;
+            }
             this.loading.update = true;
             const query = {
                 name: this.name,
@@ -247,12 +309,15 @@ export default {
                     const response = await teacherService.createTeacher(query);
                     console.log(response)
                     this.$toast.success('Жаңа мұғалім қосылды');
+                    this.validationOn = false
+                    this.$router.push(`/teacher/update/${response.data.id}`)
                 }
                 if (this.isModeUpdate) {
                     query._method = 'put'
                     const response = await teacherService.updateTeacher(this.currentTeacherID, query);
                     console.log(response)
                     this.$toast.success('Мұғалімнің ақпараттары өзгерді');
+                    this.validationOn = false
                 }
             } catch (error) {
                 this.$toast.error('Серверде қателіктер');
@@ -280,6 +345,18 @@ export default {
             } catch (error) {
                 this.$toast.error('Серверде қателіктер');
             }
+        },
+        validation() {
+            this.validationOn = true
+
+            return this.name
+                && this.birthDate
+                && this.phone
+                && this.school
+                && this.subject
+                && this.lang
+                && this.stazh
+                && this.position;
         }
     }
 }
