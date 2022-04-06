@@ -18,7 +18,7 @@
                             <i class="fas fa-user-circle mr-3" style="font-size: 70px"></i>
                             <div style="padding-left: 1rem">
                                 <h3 class="mb-0">{{ name }}</h3>
-                                <span v-if="!isModeCreate" class="badge rounded-pill bg-success ml-3">Жұмыс істейді</span>
+                                <span v-if="!isModeCreate && isActive" class="badge rounded-pill bg-success ml-3">Жұмыс істейді</span>
                             </div>
                         </div>
                         <hr size="1" class="hr-line">
@@ -26,19 +26,19 @@
                             <div class="col-md-6">
                                 <div class="mb-2">
                                     <label class="form-label">Аты-жөні</label>
-                                    <input v-model="name" type="text" class="form-control" placeholder="">
+                                    <input v-model="name" type="text" class="form-control" placeholder="" :disabled="isModeShow">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-2">
                                     <label class="form-label">Туылған күні</label>
-                                    <input v-model="birthDate" type="date" class="form-control" placeholder="24.12.1996">
+                                    <input v-model="birthDate" type="date" class="form-control" placeholder="" :disabled="isModeShow">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-2">
                                     <label class="form-label">Телефон</label>
-                                    <input v-model="phone" type="text" class="form-control" placeholder="">
+                                    <input v-model="phone" type="text" class="form-control" placeholder="" :disabled="isModeShow">
                                 </div>
                             </div>
                         </div>
@@ -53,7 +53,10 @@
                                         :searchable="true"
                                         track-by="name" label="name"
                                         placeholder="Мектепті таңдаңыз"
-                                        selectLabel="" selectedLabel="">
+                                        :show-labels="false"
+                                        :allow-empty="false"
+                                        selectLabel="" selectedLabel=""
+                                        :disabled="isModeShow">
                                     </Multiselect>
                                 </div>
                             </div>
@@ -66,7 +69,10 @@
                                         :searchable="true"
                                         track-by="name" label="name"
                                         placeholder="Пәнді таңдаңыз"
-                                        selectLabel="" selectedLabel="">
+                                        :show-labels="false"
+                                        :allow-empty="false"
+                                        selectLabel="" selectedLabel=""
+                                        :disabled="isModeShow">
                                     </Multiselect>
                                 </div>
                             </div>
@@ -79,20 +85,39 @@
                                         :searchable="false"
                                         track-by="name" label="display_name"
                                         placeholder="Оқыту тілін таңдаңыз"
-                                        selectLabel="" selectedLabel="">
+                                        :show-labels="false"
+                                        :allow-empty="false"
+                                        selectLabel="" selectedLabel=""
+                                        :disabled="isModeShow">
                                     </Multiselect>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-2">
                                     <label class="form-label">Пед-қ еңбек өтілі/стажы</label>
-                                    <input v-model="stazh" type="text" class="form-control" placeholder="">
+                                    <input v-model="stazh" type="text" class="form-control" placeholder="" :disabled="isModeShow">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-2">
                                     <label class="form-label">Пәнге қатысты басқа да курстан өтуі</label>
-                                    <textarea v-model="additionalInfo" class="form-control" rows="3"></textarea>
+                                    <textarea v-model="additionalInfo" class="form-control" rows="3" :disabled="isModeShow"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-2">
+                                    <label class="form-label">Мансабы</label>
+                                    <Multiselect
+                                        v-model="position"
+                                        :options="positionsList"
+                                        :searchable="false"
+                                        track-by="name" label="display_name"
+                                        placeholder="Мансабын таңдаңыз"
+                                        :show-labels="false"
+                                        :allow-empty="false"
+                                        selectLabel="" selectedLabel=""
+                                        :disabled="isModeShow">
+                                    </Multiselect>
                                 </div>
                             </div>
                         </div>
@@ -140,6 +165,7 @@ export default {
             stazh: null,
             additionalInfo: null,
             isActive: false,
+            position: null,
             langsList: [
                 {
                     display_name: 'қазақ тілінде',
@@ -152,6 +178,16 @@ export default {
                 {
                     display_name: 'қазақ/орыс тілдерінде',
                     name: 'kk_ru'
+                },
+            ],
+            positionsList: [
+                {
+                    name: 'teacher',
+                    display_name: 'Мұғалім'
+                },
+                {
+                    name: 'head',
+                    display_name: 'Завуч'
                 },
             ],
             schoolsList: [],
@@ -203,6 +239,8 @@ export default {
                 additional_info: this.additionalInfo,
                 school_id: this.school.id,
                 subject_id: this.subject.id,
+                is_active: this.isActive,
+                position: this.position.name,
             }
             try {
                 if (this.isModeCreate) {
@@ -238,7 +276,7 @@ export default {
                 this.school = this.schoolsList.find(x => x.id === response.data.school_id)
                 this.subject = this.subjectsList.find(x => x.id === response.data.subject_id)
                 this.lang = this.langsList.find(x => x.name === response.data.lang)
-
+                this.position = this.positionsList.find(x => x.name === response.data.position)
             } catch (error) {
                 this.$toast.error('Серверде қателіктер');
             }

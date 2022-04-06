@@ -13,6 +13,12 @@ class TeacherController extends Controller
     const LANG_LIST = "kk,ru,kk_ru";
 
     /**
+     * препод = 'teacher'
+     * завуч = 'head'
+     */
+    const POSITIONS_LIST = "teacher,head";
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -76,7 +82,36 @@ class TeacherController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($request->all());
+        $teacher = Teacher::findOrFail($id);
+        $request->validate([
+            'name' => 'required',
+            'phone' => 'required',
+            'lang' => 'required',
+            'birth_date' => 'required',
+            'additional_info' => 'required',
+            'is_active' => 'required',
+            'position' => 'required|in:'.self::POSITIONS_LIST,
+            'school_id' => 'required',
+            'subject_id' => 'required',
+            'stazh' => 'required',
+        ]);
+
+        $teacher->name              = $request->name;
+        $teacher->phone             = $request->phone;
+        $teacher->lang              = $request->lang;
+        $teacher->birth_date        = $request->birth_date;
+        $teacher->additional_info   = $request->additional_info;
+        $teacher->is_active         = $request->is_active;
+        $teacher->position          = $request->position;
+        $teacher->school_id         = $request->school_id;
+        $teacher->subject_id        = $request->subject_id;
+        $teacher->stazh             = $request->stazh;
+
+        if ($teacher->save()) {
+            return response()->json($teacher, 200);
+        }
+
+        return response()->json($teacher, 500);
     }
 
     /**
