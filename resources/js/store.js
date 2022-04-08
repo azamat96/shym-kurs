@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import * as courseService from "./services/course_service";
+import * as teacherService from "./services/teacher_service";
 
 Vue.use(Vuex);
 
@@ -10,7 +11,8 @@ export default new Vuex.Store({
         serverPath: 'http://localhost:8000',
         activeCourses: [],
         archiveCourses: [],
-        teachers: []
+        teachers: [],
+        currentTeacher: {}
     },
     mutations: {
         SET_ACTIVE_COURSES(state, payload) {
@@ -61,7 +63,22 @@ export default new Vuex.Store({
             state.archiveCourses = state.archiveCourses.filter(obj => {
                 return obj.id != response.id;
             });
-        }
+        },
+        SET_CURRENT_TEACHER(state, payload) {
+            state.currentTeacher = payload
+        },
+        ATTACH_COURSE_TO_CURRENT_TEACHER(state, payload) {
+            if (state.currentTeacher.hasOwnProperty('courses')) {
+                state.currentTeacher.courses.unshift(payload)
+            } else {
+                state.currentTeacher.courses = payload
+            }
+        },
+        DETACH_COURSE_FROM_CURRENT_TEACHER(state, id) {
+            state.currentTeacher.courses = state.currentTeacher.courses.filter(course => {
+                return course.pivot.pivot_id != id;
+            });
+        },
     },
     actions: {
         getActiveCourses() {
@@ -78,6 +95,9 @@ export default new Vuex.Store({
         },
         updateCourse({}, data) {
             return courseService.updateCourse(data.id, data.options);
+        },
+        getTeacher({}, id) {
+            return teacherService.getTeacher(id)
         },
     }
 })

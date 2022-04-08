@@ -19,3 +19,12 @@ export function getTeacher(id) {
 export function updateTeacher(id, data) {
     return http().post(`/teachers/${id}`, objectToFormData(data))
 }
+
+export function attachCourse(teacherId, courseId) {
+    return http().post(`/teachers/${teacherId}/course/${courseId}`,
+        objectToFormData({_method: 'put'}))
+}
+
+export function detachCourse(teacherId, courseId, data) {
+    return http().delete(`/teachers/${teacherId}/course/${courseId}`, {data})
+}

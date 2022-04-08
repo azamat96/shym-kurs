@@ -14,12 +14,11 @@ class CreateCourseTeacherTable extends Migration
     public function up()
     {
         Schema::create('course_teacher', function (Blueprint $table) {
+            $table->string('pivot_id');
             $table->bigInteger('course_id')->unsigned();
             $table->bigInteger('teacher_id')->unsigned();
-            $table->string('status', 100);
             $table->date('done_date');
 
-            $table->unique(['course_id', 'teacher_id']);
             $table->foreign('teacher_id')->references('id')->on('teachers');
             $table->foreign('course_id')->references('id')->on('courses');
             $table->timestamps();

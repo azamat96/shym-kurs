@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Teacher;
+use App\Course;
+use Carbon\Carbon;
 
 class TeacherController extends Controller
 {
@@ -69,7 +71,8 @@ class TeacherController extends Controller
      */
     public function show($id)
     {
-        $teacher = Teacher::where('id', $id)->firstOrFail();
+        $teacher = Teacher::where('id', $id)->with('courses')->firstOrFail();
+
         return response()->json($teacher, 200);
     }
 
@@ -123,5 +126,46 @@ class TeacherController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Attach course to teacher by $id
+     *
+     * @param  int  $teacher
+     * @param  int  $course
+     * @return \Illuminate\Http\Response
+     */
+    public function attachCourse($teacherId, $courseId)
+    {
+        $teacher = Teacher::findOrFail($teacherId);
+        $course = Course::findOrFail($courseId);
+        $doneDate = Carbon::now()->format('Y-m-d');
+
+        $pivotId = bin2hex(random_bytes(20));
+        $teacher->courses()->attach($course->id, ['pivot_id' => $pivotId, 'done_date' => $doneDate]);
+
+        $response = $teacher->courses()
+                        ->where('id', $courseId)
+                        ->wherePivot('done_date', $doneDate)
+                        ->wherePivot('pivot_id', $pivotId)
+                        ->firstOrFail();
+        return response()->json($response, 200);
+    }
+
+    /**
+     * Detach course from teacher by $id
+     *
+     * @param  int  $teacher
+     * @param  int  $course
+     * @return \Illuminate\Http\Response
+     */
+    public function detachCourse($teacherId, $courseId, Request $request)
+    {
+        $teacher = Teacher::findOrFail($teacherId);
+        $teacher->courses()->where('id', $courseId)
+                           ->wherePivot('pivot_id', $request->pivot_id)
+                           ->detach();
+
+        return response()->json(TRUE, 200);
     }
 }

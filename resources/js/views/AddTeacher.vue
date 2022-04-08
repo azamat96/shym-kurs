@@ -178,8 +178,9 @@
                                 </div>
                             </div>
                         </div>
+
                         <template v-if="!isModeShow">
-                            <button @click="saveTeacher()" type="button" class="btn btn-primary">
+                            <button @click="saveTeacher()" :disabled="loading.update" type="button" class="btn btn-primary">
                                 <span v-if="loading.update" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 <span v-else><i class="fas fa-check-circle"></i></span> Сақтау
                             </button>
@@ -187,8 +188,8 @@
                                 <button type="button" class="btn btn-secondary">Тізімге қайта оралу</button>
                             </router-link>
                         </template>
-                        <hr class="hr-line" size="1">
-                        Курстар тізімі
+
+                        <TeacherCourses v-if="!isModeCreate"></TeacherCourses>
                     </div>
                 </div>
             </div>
@@ -199,10 +200,11 @@
 <script>
 import Multiselect from 'vue-multiselect'
 import * as teacherService from '../services/teacher_service'
+import TeacherCourses from "../components/TeacherCourses";
 
 export default {
     name: "AddTeacher",
-    components: {Multiselect},
+    components: {Multiselect, TeacherCourses},
     props: {
         mode: {
             type: String,
@@ -223,7 +225,7 @@ export default {
             lang: null,
             stazh: null,
             additionalInfo: null,
-            isActive: false,
+            isActive: true,
             position: null,
             langsList: [
                 {
@@ -258,17 +260,46 @@ export default {
         isModeCreate() { return this.mode === "create" },
         isModeUpdate() { return this.mode === "update" },
         isModeShow() { return this.mode === "show" },
-        currentTeacherID() { return this.$route.params.id }
+        currentTeacherID() { return this.$route.params.id },
     },
     mounted() {
         this.loading.page = true;
         Promise.all([this.loadListOfSchools(), this.loadListOfSubjects()]).then(() => {
-            this.getTeacher().then(() => {
-                this.loading.page = false;
-            });
+            this.getTeacher();
         })
+        this.setInputsByDefault()
+    },
+    watch: {
+        // Для смены ровтов где роуты reusable(route change calls same component)
+        $route(to, from) {
+            // react to route changes...
+            if (to.name === "update_teacher") {
+                console.log('route updated', to, from)
+                this.mode = "update"
+                this.getTeacher();
+            }
+            if (to.name === "create_teacher") {
+                console.log('route created', to, from)
+                this.mode = "create"
+                this.setInputsByDefault()
+            }
+        }
     },
     methods: {
+        setInputsByDefault() {
+            if (this.isModeCreate) {
+                this.name = null
+                this.phone = null
+                this.additionalInfo = null
+                this.birthDate = null
+                this.school = null
+                this.subject = null
+                this.isActive = true
+                this.lang = null
+                this.stazh = null
+                this.position = this.positionsList[0]
+            }
+        },
         loadListOfSchools: async function() {
             try {
                 const response = await teacherService.loadSchools();
@@ -289,6 +320,7 @@ export default {
         },
         saveTeacher: async function() {
             if (!this.validation()) {
+                this.validationOn = true
                 return;
             }
             this.loading.update = true;
@@ -307,7 +339,7 @@ export default {
             try {
                 if (this.isModeCreate) {
                     const response = await teacherService.createTeacher(query);
-                    console.log(response)
+                    console.log(response, 'created')
                     this.$toast.success('Жаңа мұғалім қосылды');
                     this.validationOn = false
                     this.$router.push(`/teacher/update/${response.data.id}`)
@@ -315,7 +347,7 @@ export default {
                 if (this.isModeUpdate) {
                     query._method = 'put'
                     const response = await teacherService.updateTeacher(this.currentTeacherID, query);
-                    console.log(response)
+                    console.log(response, 'updated')
                     this.$toast.success('Мұғалімнің ақпараттары өзгерді');
                     this.validationOn = false
                 }
@@ -326,11 +358,14 @@ export default {
         },
         getTeacher: async function() {
             if (this.isModeCreate) {
+                this.loading.page = false;
                 return;
             }
+            this.loading.page = true;
             try {
-                const response = await teacherService.getTeacher(this.currentTeacherID);
-                console.log(response.data)
+                const response = await this.$store.dispatch('getTeacher', this.currentTeacherID);
+                this.$store.commit('SET_CURRENT_TEACHER', response.data)
+                console.log(response.data, 'getTeacher1')
                 this.name = response.data.name
                 this.phone = response.data.phone
                 this.additionalInfo = response.data.additional_info
@@ -345,10 +380,9 @@ export default {
             } catch (error) {
                 this.$toast.error('Серверде қателіктер');
             }
+            this.loading.page = false;
         },
         validation() {
-            this.validationOn = true
-
             return this.name
                 && this.birthDate
                 && this.phone

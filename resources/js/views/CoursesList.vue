@@ -109,6 +109,8 @@ export default {
                 this.errors = {}
                 this.createCourseModal.hide()
                 this.$toast.success(`Жаңа "${response.data.name}" курсы қосылды`);
+                this.newCourse.name = ''
+                this.newCourse.description = ''
             } catch (error) {
                 switch (error.response.status) {
                     case 422:
