@@ -11,77 +11,112 @@
             <li class="breadcrumb-item"><a href="/">Басты бет</a></li>
             <li class="breadcrumb-item active">Мұғалімдер тізімі</li>
         </ol>
+
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-search"></i> Фильтрлар
             </div>
             <div class="card-body">
+                <div v-if="loading.filter" class="d-flex justify-content-center">
+                    <div class="spinner-border text-primary m-5" style="width: 3rem; height: 3rem;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <template v-else>
                 <div class="row">
                     <div class="col-lg-3">
+                        <label class="form-label">Мектебі</label>
                         <Multiselect
-                            v-model="subjects"
-                            :options="[]"
+                            v-model="filter.schools"
+                            :options="schoolsList"
                             :searchable="false"
-                            track-by="name" label="display_name"
-                            placeholder="Мансабын таңдаңыз"
+                            track-by="name" label="name"
+                            placeholder="Мектепті таңдаңыз"
                             :show-labels="false"
-                            :allow-empty="false"
-                            selectLabel="" selectedLabel=""
-                            :disabled="false"
-                        >
+                            :allow-empty="true"
+                            :multiple="true"
+                            :close-on-select="false"
+                            :clear-on-select="false"
+                            selectLabel="" selectedLabel="">
                         </Multiselect>
                     </div>
                     <div class="col-lg-3">
+                        <label class="form-label">Пәні</label>
                         <Multiselect
-                            v-model="subjects"
-                            :options="[]"
+                            v-model="filter.subjects"
+                            :options="subjectsList"
                             :searchable="false"
-                            track-by="name" label="display_name"
-                            placeholder="Мансабын таңдаңыз"
+                            track-by="name" label="name"
+                            placeholder="Пәнін таңдаңыз"
                             :show-labels="false"
-                            :allow-empty="false"
-                            selectLabel="" selectedLabel=""
-                            :disabled="false"
-                        >
+                            :allow-empty="true"
+                            :multiple="true"
+                            :close-on-select="false"
+                            :clear-on-select="false"
+                            selectLabel="" selectedLabel="">
                         </Multiselect>
                     </div>
                     <div class="col-lg-3">
+                        <label class="form-label">Курсын таңдаңыз</label>
                         <Multiselect
-                            v-model="subjects"
+                            v-model="filter.courses"
                             :options="[]"
                             :searchable="false"
-                            track-by="name" label="display_name"
-                            placeholder="Мансабын таңдаңыз"
+                            track-by="name" label="name"
+                            placeholder="Курсын таңдаңыз"
                             :show-labels="false"
-                            :allow-empty="false"
-                            selectLabel="" selectedLabel=""
-                            :disabled="false"
-                        >
+                            :allow-empty="true"
+                            :multiple="true"
+                            :close-on-select="false"
+                            :clear-on-select="false"
+                            selectLabel="" selectedLabel="">
                         </Multiselect>
                     </div>
                     <div class="col-lg-3">
+                        <label class="form-label">Тілін таңдаңыз</label>
                         <Multiselect
-                            v-model="subjects"
-                            :options="[]"
+                            v-model="filter.langs"
+                            :options="langsList"
+                            :searchable="false"
+                            track-by="name" label="display_name"
+                            placeholder="Тілін таңдаңыз"
+                            :show-labels="false"
+                            :allow-empty="true"
+                            :multiple="true"
+                            :close-on-select="false"
+                            :clear-on-select="false"
+                            selectLabel="" selectedLabel="">
+                        </Multiselect>
+                    </div>
+                </div>
+                <div class="row mt-2 mb-1">
+                    <div class="col-lg-6">
+                        <label class="form-label">Аты-жөнін енгізіңіз</label>
+                        <input v-model="filter.name" type="text" class="form-control" placeholder="Мыс: Айнұр Асанова">
+                    </div>
+                    <div class="col-lg-3">
+                        <label class="form-label">Мансабы</label>
+                        <Multiselect
+                            v-model="filter.positions"
+                            :options="positionsList"
                             :searchable="false"
                             track-by="name" label="display_name"
                             placeholder="Мансабын таңдаңыз"
                             :show-labels="false"
-                            :allow-empty="false"
-                            selectLabel="" selectedLabel=""
-                            :disabled="false"
-                        >
+                            :allow-empty="true"
+                            :multiple="true"
+                            :close-on-select="false"
+                            :clear-on-select="false"
+                            selectLabel="" selectedLabel="">
                         </Multiselect>
                     </div>
-                    <div class="col-lg-10">
-                        <input type="text" class="form-control mt-3" id="exampleInputEmail1">
-                    </div>
-                    <div class="col-lg-2">
-                        <button class="btn btn-primary w-100 mt-3">
-                            <i class="fas fa-search"></i> Іздеу
+                    <div class="col-lg-2 d-flex align-items-end">
+                        <button class="btn btn-primary w-100" style="height: 43px">
+                            <i class="fas fa-search"></i> Іздеу/Пойск
                         </button>
                     </div>
                 </div>
+                </template>
             </div>
         </div>
         <div class="card mb-4">
@@ -160,6 +195,7 @@
 <script>
 import Multiselect from "vue-multiselect";
 import * as teacherService from '../services/teacher_service'
+import {mapState,mapActions} from 'vuex'
 
 export default {
     name: "TeachersList",
@@ -175,28 +211,43 @@ export default {
             },
             loading: {
                 list: true,
+                filter: true,
             },
-            subjects: null,
-            langsList: [
-                {
-                    display_name: 'қазақ тілінде',
-                    name: 'kk'
-                },
-                {
-                    display_name: 'орыс тілінде',
-                    name: 'ru'
-                },
-                {
-                    display_name: 'қазақ/орыс тілдерінде',
-                    name: 'kk_ru'
-                },
-            ],
+            filter: {
+                name: "",
+                schools: [],
+                subjects: [],
+                langs: [],
+                courses: [],
+                positions: []
+            },
+
+
         }
     },
+    computed: {
+        ...mapState({
+            schoolsList: 'schools',
+            subjectsList: 'subjects',
+            langsList: 'langs',
+            positionsList: 'positions',
+        }),
+    },
     mounted() {
+        // this.filter.positions.push(this.positionsList[0])
+        this.loading.filter = true
+        Promise.all([this.loadAllSchools(), this.loadAllSubjects()]).then(() => {
+            this.loading.filter = false
+        }, () => {
+            this.$toast.error('Серверде қателіктері');
+        })
         this.searchTeachers()
     },
     methods: {
+        ...mapActions({
+            loadAllSchools: 'loadAllSchools',
+            loadAllSubjects: 'loadAllSubjects',
+        }),
         searchTeachers: async function(page = 1) {
             this.loading.list = true
             this.pagination.page = page
@@ -220,6 +271,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+$multiselect-length: 43px;
 
+.form-control {
+    height: $multiselect-length;
+}
 </style>

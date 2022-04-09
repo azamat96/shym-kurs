@@ -9,10 +9,36 @@ export default new Vuex.Store({
     state: {
         apiURL: 'http://127.0.0.1:8000/api',
         serverPath: 'http://localhost:8000',
+        langs: [
+            {
+                display_name: 'қазақ тілінде',
+                name: 'kk'
+            },
+            {
+                display_name: 'орыс тілінде',
+                name: 'ru'
+            },
+            {
+                display_name: 'қазақ/орыс тілдерінде',
+                name: 'kk_ru'
+            },
+        ],
+        positions: [
+            {
+                name: 'teacher',
+                display_name: 'Мұғалім'
+            },
+            {
+                name: 'head',
+                display_name: 'Завуч'
+            },
+        ],
         activeCourses: [],
         archiveCourses: [],
         teachers: [],
-        currentTeacher: {}
+        currentTeacher: {},
+        schools: [],
+        subjects: [],
     },
     mutations: {
         SET_ACTIVE_COURSES(state, payload) {
@@ -20,6 +46,12 @@ export default new Vuex.Store({
         },
         SET_ARCHIVE_COURSES(state, payload) {
             state.archiveCourses = payload
+        },
+        SET_SCHOOLS(state, payload) {
+            state.schools = payload
+        },
+        SET_SUBJECTS(state, payload) {
+            state.subjects = payload
         },
         CREATE_COURSE(state, payload) {
             state.activeCourses.unshift(payload)
@@ -98,6 +130,16 @@ export default new Vuex.Store({
         },
         getTeacher({}, id) {
             return teacherService.getTeacher(id)
+        },
+        async loadAllSchools({commit}) {
+            const response = await teacherService.loadSchools();
+            commit('SET_SCHOOLS', response.data)
+            console.log('0', 'vuex')
+        },
+        async loadAllSubjects({commit}) {
+            const response = await teacherService.loadSubjects();
+            commit('SET_SUBJECTS', response.data)
+            console.log('2', 'vuex')
         },
     }
 })

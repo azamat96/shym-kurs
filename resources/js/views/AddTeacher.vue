@@ -201,6 +201,7 @@
 import Multiselect from 'vue-multiselect'
 import * as teacherService from '../services/teacher_service'
 import TeacherCourses from "../components/TeacherCourses";
+import {mapState, mapActions} from 'vuex'
 
 export default {
     name: "AddTeacher",
@@ -227,32 +228,6 @@ export default {
             additionalInfo: null,
             isActive: true,
             position: null,
-            langsList: [
-                {
-                    display_name: 'қазақ тілінде',
-                    name: 'kk'
-                },
-                {
-                    display_name: 'орыс тілінде',
-                    name: 'ru'
-                },
-                {
-                    display_name: 'қазақ/орыс тілдерінде',
-                    name: 'kk_ru'
-                },
-            ],
-            positionsList: [
-                {
-                    name: 'teacher',
-                    display_name: 'Мұғалім'
-                },
-                {
-                    name: 'head',
-                    display_name: 'Завуч'
-                },
-            ],
-            schoolsList: [],
-            subjectsList: [],
             validationOn: false,
         }
     },
@@ -261,11 +236,19 @@ export default {
         isModeUpdate() { return this.mode === "update" },
         isModeShow() { return this.mode === "show" },
         currentTeacherID() { return this.$route.params.id },
+        ...mapState({
+            schoolsList: 'schools',
+            subjectsList: 'subjects',
+            langsList: 'langs',
+            positionsList: 'positions'
+        }),
     },
     mounted() {
         this.loading.page = true;
         Promise.all([this.loadListOfSchools(), this.loadListOfSubjects()]).then(() => {
             this.getTeacher();
+        }, () => {
+            this.$toast.error('Серверде қателіктері');
         })
         this.setInputsByDefault()
     },
@@ -300,24 +283,10 @@ export default {
                 this.position = this.positionsList[0]
             }
         },
-        loadListOfSchools: async function() {
-            try {
-                const response = await teacherService.loadSchools();
-                console.log('0')
-                this.schoolsList = response.data
-            } catch (error) {
-                this.$toast.error('Серверде қателіктері');
-            }
-        },
-        loadListOfSubjects: async function() {
-            try {
-                const response = await teacherService.loadSubjects();
-                console.log('2')
-                this.subjectsList = response.data
-            } catch (error) {
-                this.$toast.error('Серверде қателіктері');
-            }
-        },
+        ...mapActions({
+            loadListOfSchools: 'loadAllSchools',
+            loadListOfSubjects: 'loadAllSubjects',
+        }),
         saveTeacher: async function() {
             if (!this.validation()) {
                 this.validationOn = true
