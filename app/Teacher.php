@@ -13,4 +13,12 @@ class Teacher extends Model
                     ->withPivot('pivot_id', 'done_date')
                     ->orderBy('course_teacher.created_at', 'desc');
     }
+
+    public function school() {
+        return $this->belongsTo('App\School');
+    }
+
+    public function subject() {
+        return $this->belongsTo('App\Subject');
+    }
 }

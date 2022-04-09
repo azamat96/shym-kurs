@@ -397,7 +397,6 @@ export default {
 </script>
 
 <style>
-@import "~vue-multiselect/dist/vue-multiselect.min.css";
 
 .multiselect__tags {
     border: 1px solid #ced4da;

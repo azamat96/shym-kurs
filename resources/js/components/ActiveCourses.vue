@@ -27,7 +27,7 @@
                 <td>505</td>
                 <td>505</td>
                 <td>
-                    <button v-on:click="editCourse(course)" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өзгерту"><i class="fas fa-edit"></i></button>
+                    <button v-on:click="editCourse(course)" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өзгерту"><i class="fas fa-pencil-alt"></i></button>
                     <button v-on:click="archiveCourse(course, index)" class="btn btn-secondary btn-sm">
                         <span v-if="loading.archive === index" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                         <span v-else><i class="fas fa-power-off"></i></span> Архивтау
