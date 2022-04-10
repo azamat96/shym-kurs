@@ -113,8 +113,9 @@ export default new Vuex.Store({
         },
     },
     actions: {
-        getActiveCourses() {
-            return courseService.loadCourses();
+        async getActiveCourses({commit}) {
+            const response = await courseService.loadCourses();
+            commit('SET_ACTIVE_COURSES', response.data)
         },
         getArchiveCourses() {
             return courseService.loadCourses({is_active: 0});

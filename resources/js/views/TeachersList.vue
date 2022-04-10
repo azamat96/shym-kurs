@@ -29,7 +29,7 @@
                         <Multiselect
                             v-model="filter.schools"
                             :options="schoolsList"
-                            :searchable="false"
+                            :searchable="true"
                             track-by="name" label="name"
                             placeholder="Мектепті таңдаңыз"
                             :show-labels="false"
@@ -60,16 +60,20 @@
                         <label class="form-label">Курсын таңдаңыз</label>
                         <Multiselect
                             v-model="filter.courses"
-                            :options="[]"
+                            :options="coursesList"
+                            group-values="variants"
+                            group-label="course"
+                            :group-select="false"
                             :searchable="false"
-                            track-by="name" label="name"
+                            track-by="display_name" label="display_name"
                             placeholder="Курсын таңдаңыз"
                             :show-labels="false"
                             :allow-empty="true"
                             :multiple="true"
                             :close-on-select="false"
                             :clear-on-select="false"
-                            selectLabel="" selectedLabel="">
+                            selectLabel="" selectedLabel=""
+                            @select="removeOptionsWhenNoneSelected">
                         </Multiselect>
                     </div>
                     <div class="col-lg-3">
@@ -111,7 +115,7 @@
                         </Multiselect>
                     </div>
                     <div class="col-lg-2 d-flex align-items-end">
-                        <button class="btn btn-primary w-100" style="height: 43px">
+                        <button @click="" class="btn btn-primary w-100" style="height: 43px">
                             <i class="fas fa-search"></i> Іздеу/Пойск
                         </button>
                     </div>
@@ -213,6 +217,7 @@ export default {
                 list: true,
                 filter: true,
             },
+            filterCourses: [],
             filter: {
                 name: "",
                 schools: [],
@@ -221,7 +226,7 @@ export default {
                 courses: [],
                 positions: []
             },
-
+            coursesList: []
 
         }
     },
@@ -231,12 +236,18 @@ export default {
             subjectsList: 'subjects',
             langsList: 'langs',
             positionsList: 'positions',
+            activeCourses: 'activeCourses',
         }),
     },
     mounted() {
         // this.filter.positions.push(this.positionsList[0])
         this.loading.filter = true
-        Promise.all([this.loadAllSchools(), this.loadAllSubjects()]).then(() => {
+        Promise.all([
+            this.loadAllSchools(),
+            this.loadAllSubjects(),
+            this.loadAllCourses()
+        ]).then(() => {
+            this.addOptionsToCourses()
             this.loading.filter = false
         }, () => {
             this.$toast.error('Серверде қателіктері');
@@ -247,6 +258,7 @@ export default {
         ...mapActions({
             loadAllSchools: 'loadAllSchools',
             loadAllSubjects: 'loadAllSubjects',
+            loadAllCourses: 'getActiveCourses',
         }),
         searchTeachers: async function(page = 1) {
             this.loading.list = true
@@ -266,6 +278,51 @@ export default {
                 this.$toast.error('Серверде қателіктер');
             }
             this.loading.list = false;
+        },
+        addOptionsToCourses() {
+            let currentYear = new Date().getFullYear()
+            this.activeCourses.forEach((course) => {
+                let optionGroup = {
+                    course: course.name,
+                    variants: []
+                }
+                for(let i=0; i<7;i++) {
+                    let year = currentYear-i;
+                    let variant = {
+                        display_name: `${course.name}-${year}`,
+                        name: course.name,
+                        id: course.id,
+                        year: year
+                    }
+                    if (i === 6) {
+                        variant.before = 1
+                        variant.display_name += ' дейін'
+                    }
+                    optionGroup.variants.push(variant)
+                }
+                optionGroup.variants.push({
+                    display_name: `${course.name}-өткен жоқ`,
+                    name: course.name,
+                    id: course.id,
+                    year: 0
+                })
+                this.coursesList.push(optionGroup)
+            })
+        },
+        removeOptionsWhenNoneSelected(selectedOption) {
+            if (selectedOption.year > 0) {
+                this.filter.courses.reduceRight(function(acc, course, index, array) {
+                    if (course.id === selectedOption.id && course.year === 0) {
+                        array.splice(index, 1);
+                    }
+                }, {});
+            } else {
+                this.filter.courses.reduceRight(function(acc, course, index, array) {
+                    if (course.id === selectedOption.id && course.year !== selectedOption.year) {
+                        array.splice(index, 1);
+                    }
+                }, {});
+            }
         }
     }
 }

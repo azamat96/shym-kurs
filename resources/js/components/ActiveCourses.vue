@@ -102,8 +102,7 @@ export default {
         loadCourses: async function () {
             this.loading.page = true
             try {
-                const response = await this.$store.dispatch('getActiveCourses');
-                this.$store.commit('SET_ACTIVE_COURSES', response.data)
+                await this.$store.dispatch('getActiveCourses');
             } catch (error) {
                 this.$toast.error('Ощибка с сервером');
             }
