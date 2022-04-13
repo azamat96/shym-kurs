@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import '../plugins/shablon-scripts'
+
 export default {
     name: "Header"
 }

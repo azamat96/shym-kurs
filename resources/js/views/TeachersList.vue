@@ -211,7 +211,7 @@ export default {
         return {
             teachersList: [],
             pagination: {
-                limit: 15,
+                limit: 5,
                 page: 1,
                 total: null,
                 last_page: null
@@ -276,8 +276,8 @@ export default {
                     }
                 })
                 let params = {
-                    limit: this.limit,
-                    page: this.page,
+                    limit: this.pagination.limit,
+                    page: this.pagination.page,
                     name: this.filter.name,
                     school_ids: this.filter.schools.map((school) => school.id),
                     subject_ids: this.filter.subjects.map((subject) => subject.id),

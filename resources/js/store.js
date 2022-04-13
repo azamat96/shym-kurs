@@ -7,7 +7,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        apiURL: 'http://127.0.0.1:8000/api',
+        apiURL: window.location.origin+'/api',
         serverPath: 'http://localhost:8000',
         langs: [
             {

@@ -43,7 +43,7 @@ class TeacherController extends Controller
             ->select('teachers.*', 'schools.name as school_name', 'subjects.name as subject_name')
             ->join('schools', 'teachers.school_id', '=', 'schools.id')
             ->join('subjects', 'teachers.subject_id', '=', 'subjects.id')
-            ->join('course_teacher', 'teachers.id', '=', 'course_teacher.teacher_id')
+            ->leftJoin('course_teacher', 'teachers.id', '=', 'course_teacher.teacher_id')
             ->where('teachers.is_active', TRUE)
             ->when($name, function($query, $name) {
                 return $query->where('teachers.name', 'like', '%'.$name.'%');
