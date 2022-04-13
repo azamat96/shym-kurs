@@ -115,7 +115,7 @@
                         </Multiselect>
                     </div>
                     <div class="col-lg-2 d-flex align-items-end">
-                        <button @click="" class="btn btn-primary w-100" style="height: 43px">
+                        <button @click="searchTeachers()" class="btn btn-success w-100" style="height: 43px">
                             <i class="fas fa-search"></i> Іздеу/Пойск
                         </button>
                     </div>
@@ -134,8 +134,10 @@
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
-                <table v-else id="datatablesSimple" class="table table-bordered">
-                    <caption>Тізімде {{pagination.total}} мұғалімнің {{teachersList.length}} көрсетілінді</caption>
+                <template v-else>
+                <table id="datatablesSimple" class="table table-bordered">
+                    <caption v-if="pagination.total && teachersList.length">Тізімде {{pagination.total}} мұғалімнің {{teachersList.length}} көрсетілінді</caption>
+                    <caption v-else>Енгізілген параметрлар бойынша мұғалімдер табылмады...</caption>
                     <thead class="table-light">
                     <tr>
                         <th>#</th>
@@ -161,9 +163,9 @@
                     <tbody>
                     <tr v-for="(teacher, index) in teachersList" :key="teacher.id">
                         <td>{{pagination.limit*(pagination.page-1)+index+1}}</td>
-                        <td>{{teacher.school.name}}</td>
+                        <td>{{teacher.school_name}}</td>
                         <td>{{teacher.name}}</td>
-                        <td>{{teacher.subject.name}}</td>
+                        <td>{{teacher.subject_name}}</td>
                         <td>{{teacher.birth_date}}</td>
                         <td>{{langsList.find((lang) => teacher.lang === lang.name).display_name }}</td>
                         <td>
@@ -174,7 +176,7 @@
                     </tr>
                     </tbody>
                 </table>
-                <nav v-if="teachersList.length > 0" aria-label="Page navigation example">
+                <nav v-if="pagination.last_page > 0" aria-label="Page navigation example">
                     <ul class="pagination justify-content-start pagination-sm">
                         <li :class="['page-item', {'disabled': pagination.page === 1}]">
                             <a @click.prevent="searchTeachers(pagination.page-1)" class="page-link" href="#" tabindex="-1" aria-disabled="true">
@@ -191,6 +193,7 @@
                         </li>
                     </ul>
                 </nav>
+                </template>
             </div>
         </div>
     </div>
@@ -217,7 +220,6 @@ export default {
                 list: true,
                 filter: true,
             },
-            filterCourses: [],
             filter: {
                 name: "",
                 schools: [],
@@ -264,10 +266,27 @@ export default {
             this.loading.list = true
             this.pagination.page = page
             try {
+                let coursesOn = []
+                let coursesNotIds = []
+                this.filter.courses.forEach((course) => {
+                    if (course.year > 0) {
+                        coursesOn.push({id: course.id, year: course.year, before: course.before})
+                    } else {
+                        coursesNotIds.push(course.id)
+                    }
+                })
                 let params = {
                     limit: this.limit,
                     page: this.page,
+                    name: this.filter.name,
+                    school_ids: this.filter.schools.map((school) => school.id),
+                    subject_ids: this.filter.subjects.map((subject) => subject.id),
+                    langs: this.filter.langs.map((lang) => lang.name),
+                    courses_on: coursesOn,
+                    courses_not: coursesNotIds,
+                    positions: this.filter.positions.map((position) => position.name)
                 }
+                console.log(params)
                 const response = await teacherService.searchTeachers(params)
                 this.pagination.total = response.data.total
                 this.pagination.last_page = response.data.last_page
