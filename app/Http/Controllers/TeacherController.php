@@ -36,6 +36,7 @@ class TeacherController extends Controller
         $positions  = $request->input('positions', []);
         $coursesOn  = $request->input('courses_on', []);
         $coursesNot = $request->input('courses_not', []);
+        $coursesStrict = $request->input('courses_strict', 0);
         $limit      = $request->input('limit', 15);
         $page       = $request->input('page', 1);
 
@@ -46,13 +47,7 @@ class TeacherController extends Controller
             ->leftJoin('course_teacher', 'teachers.id', '=', 'course_teacher.teacher_id')
             ->where('teachers.is_active', TRUE)
             ->when($name, function($query, $name) {
-                return $query->where('teachers.name', 'like', '%'.$name.'%');
-            })
-            ->when($langs, function($query, $langs) {
-                return $query->whereIn('teachers.lang', $langs);
-            })
-            ->when($positions, function($query, $positions) {
-                return $query->whereIn('teachers.position', $positions);
+                return $query->where('teachers.name', 'like', "'%".$name."%'");
             })
             ->when($schoolIds, function($query, $schoolIds) {
                 return $query->whereIn('schools.id', $schoolIds);
@@ -82,20 +77,23 @@ class TeacherController extends Controller
         $sql_with_bindings = Str::replaceArray('?', $queryBuilder->getBindings(), $queryBuilder->toSql());
         if (!empty($coursesNot)) {
             $notThatTeachersSQL = "(SELECT * FROM (SELECT DISTINCT `teacher_id` FROM `course_teacher` WHERE `course_id` IN (".implode(",", $coursesNot).")) AS subquery)";
-                                $aa = DB::table('course_teacher')
-                                ->selectRaw('DISTINCT teacher_id')
-                                ->whereIn('course_id', $coursesNot);
 
-            $sql_with_bindings .= " AND `course_teacher`.`teacher_id` NOT IN ".$notThatTeachersSQL;
+            $sql_with_bindings .= " AND `teachers`.`id` NOT IN ".$notThatTeachersSQL;
+        }
+        if(!empty($positions)) {
+            $sql_with_bindings .= " AND `teachers`.`position` IN ('".implode("','", $positions)."')";
+        }
+        if(!empty($langs)) {
+            $sql_with_bindings .= " AND `teachers`.`lang` IN ('".implode("','", $langs)."')";
         }
 
-        $sql_with_bindings .= " GROUP BY `teachers`.`id` HAVING COUNT(*) >= ".count($coursesOn);
+        $sql_with_bindings .= " GROUP BY `teachers`.`id`";
+        if ($coursesStrict) {
+            $sql_with_bindings .= " HAVING COUNT(*) = ".count($coursesOn);
+        }
 
         $total = DB::select("SELECT COUNT(*) as total FROM ( ".$sql_with_bindings." ) as tt")[0]->total;
         $data  = DB::select($sql_with_bindings." LIMIT ".$limit." OFFSET ".($page-1)*$limit);
-        // $total = $queryBuilder->selectRaw('teachers.*, COUNT(DISTINCT teachers.id) as total')->get();//->first()->total;
-//         $queryBuilder->groupBy('teachers.id')->havingRaw('COUNT(*) >= ?', [count($coursesOn)]);
-//         $data = $queryBuilder->offset(($page-1)*$limit)->limit($limit)->get();
 
         $pagination = [
             'total'         => $total,

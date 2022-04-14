@@ -57,7 +57,13 @@
                         </Multiselect>
                     </div>
                     <div class="col-lg-3">
-                        <label class="form-label">Курсын таңдаңыз</label>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label class="form-label">Курсын таңдаңыз</label>
+                            <div class="form-check form-switch">
+                                <input v-model="filter.courses_strict" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" title="Курс шарттарының бәрін қамтысын">
+                                <i class="fas fa-info-circle" title="Енгізілген курс шарттарының бәрін қамтуы немесе жалпылама іздеу"></i>
+                            </div>
+                        </div>
                         <Multiselect
                             v-model="filter.courses"
                             :options="coursesList"
@@ -169,8 +175,8 @@
                         <td>{{teacher.birth_date}}</td>
                         <td>{{langsList.find((lang) => teacher.lang === lang.name).display_name }}</td>
                         <td>
-                            <button @click="" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Ашып көру"><i class="fas fa-eye"></i></button>
-                            <button @click="" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өзгерту"><i class="fas fa-pencil-alt"></i></button>
+                            <router-link :to="'/teacher/show/'+teacher.id" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Ашып көру"><i class="fas fa-eye"></i></router-link>
+                            <router-link :to="'/teacher/update/'+teacher.id" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өзгерту"><i class="fas fa-pencil-alt"></i></router-link>
                             <button @click="" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өшіру"><i class="fas fa-trash"></i></button>
                         </td>
                     </tr>
@@ -226,6 +232,7 @@ export default {
                 subjects: [],
                 langs: [],
                 courses: [],
+                courses_strict: false,
                 positions: []
             },
             coursesList: []
@@ -284,6 +291,7 @@ export default {
                     langs: this.filter.langs.map((lang) => lang.name),
                     courses_on: coursesOn,
                     courses_not: coursesNotIds,
+                    courses_strict: this.filter.courses_strict ? 1 : 0,
                     positions: this.filter.positions.map((position) => position.name)
                 }
                 console.log(params)
@@ -294,6 +302,9 @@ export default {
 
                 console.log(response, 'teachersList')
             } catch (e) {
+                this.pagination.total = null
+                this.pagination.last_page = null
+                this.teachersList = []
                 this.$toast.error('Серверде қателіктер');
             }
             this.loading.list = false;
