@@ -32,3 +32,7 @@ export function detachCourse(teacherId, courseId, data) {
 export function searchTeachers(params = {}) {
     return http().get('/teachers', {params})
 }
+
+export function deleteTeacher(teacherId) {
+    return http().delete(`/teachers/${teacherId}`);
+}

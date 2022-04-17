@@ -177,13 +177,13 @@
                         <td>
                             <router-link :to="'/teacher/show/'+teacher.id" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Ашып көру"><i class="fas fa-eye"></i></router-link>
                             <router-link :to="'/teacher/update/'+teacher.id" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өзгерту"><i class="fas fa-pencil-alt"></i></router-link>
-                            <button @click="" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өшіру"><i class="fas fa-trash"></i></button>
+                            <button @click="deleteTeacher(teacher, index)" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өшіру"><i class="fas fa-trash"></i></button>
                         </td>
                     </tr>
                     </tbody>
                 </table>
                 <nav v-if="pagination.last_page > 0" aria-label="Page navigation example">
-                    <ul class="pagination justify-content-start pagination-sm">
+                    <ul class="pagination justify-content-start pagination-sm flex-wrap">
                         <li :class="['page-item', {'disabled': pagination.page === 1}]">
                             <a @click.prevent="searchTeachers(pagination.page-1)" class="page-link" href="#" tabindex="-1" aria-disabled="true">
                                 <span aria-hidden="true">&laquo;</span> Артқа
@@ -217,7 +217,7 @@ export default {
         return {
             teachersList: [],
             pagination: {
-                limit: 5,
+                limit: 15,
                 page: 1,
                 total: null,
                 last_page: null
@@ -236,7 +236,6 @@ export default {
                 positions: []
             },
             coursesList: []
-
         }
     },
     computed: {
@@ -352,6 +351,19 @@ export default {
                         array.splice(index, 1);
                     }
                 }, {});
+            }
+        },
+        deleteTeacher: async function(teacher, index) {
+            if (!window.confirm(`Сіз шынында да "${teacher.name}" өшіргіңіз келеді ме?`)) {
+                return;
+            }
+            try {
+                await this.$store.dispatch('deleteTeacher', teacher.id);
+                this.teachersList.splice(index, 1)
+                this.pagination.total--
+                this.$toast.success(`"${teacher.name}" өшірілді`);
+            } catch (error) {
+                this.$toast.error('Серверде қателіктер');
             }
         }
     }

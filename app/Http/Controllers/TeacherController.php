@@ -201,7 +201,14 @@ class TeacherController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $teacher = Teacher::findOrFail($id);
+        $teacher->is_active = FALSE;
+
+        if ($teacher->save()) {
+            return response()->json($teacher, 200);
+        }
+
+        return response()->json($teacher, 500);
     }
 
     /**

@@ -135,12 +135,13 @@ export default new Vuex.Store({
         async loadAllSchools({commit}) {
             const response = await teacherService.loadSchools();
             commit('SET_SCHOOLS', response.data)
-            console.log('0', 'vuex')
         },
         async loadAllSubjects({commit}) {
             const response = await teacherService.loadSubjects();
             commit('SET_SUBJECTS', response.data)
-            console.log('2', 'vuex')
+        },
+        deleteTeacher({}, id) {
+            return teacherService.deleteTeacher(id);
         },
     }
 })
