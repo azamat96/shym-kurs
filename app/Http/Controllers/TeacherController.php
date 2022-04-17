@@ -89,7 +89,7 @@ class TeacherController extends Controller
 
         $sql_with_bindings .= " GROUP BY `teachers`.`id`";
         if ($coursesStrict) {
-            $sql_with_bindings .= " HAVING COUNT(*) = ".count($coursesOn);
+            $sql_with_bindings .= " HAVING COUNT(*) >= ".count($coursesOn);
         }
 
         $total = DB::select("SELECT COUNT(*) as total FROM ( ".$sql_with_bindings." ) as tt")[0]->total;
