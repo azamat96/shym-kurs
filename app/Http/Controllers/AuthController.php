@@ -39,7 +39,7 @@ class AuthController extends Controller
 
         if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             return response()->json([
-                'message' => 'Unauthorized',
+                'message' => 'Email немесе құпия сөз қате',
                 'status_code' => 401
             ], 401);
         }
@@ -62,7 +62,7 @@ class AuthController extends Controller
             ], 200);
         } else {
             return response()->json([
-                'message' => 'Error occurred, try again',
+                'message' => 'Серверде қателіктер, кейінірек қайталап көріңіз',
                 'status_code' => 500
             ], 500);
         }

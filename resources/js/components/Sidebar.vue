@@ -3,22 +3,22 @@
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
             <div class="sb-sidenav-menu">
                 <div class="nav">
-                    <router-link to="/" class="nav-link" exact>
+                    <router-link to="/home" class="nav-link" exact>
                         <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
                         Басты бет
                     </router-link>
                     <div class="sb-sidenav-menu-heading">Мұғалімдер</div>
-                    <router-link to="/teacher/list" class="nav-link" exact-path>
+                    <router-link to="/home/teacher/list" class="nav-link" exact-path>
                         <div class="sb-nav-link-icon">
                             <i class="fas fa-table"></i></div>
                         Мұғалімдер тізімі
                     </router-link>
-                    <router-link to="/teacher/create" class="nav-link" exact>
+                    <router-link to="/home/teacher/create" class="nav-link" exact>
                         <div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>
                         Мұғалім қосу/өшіру
                     </router-link>
                     <div class="sb-sidenav-menu-heading">Курстар</div>
-                    <router-link to="/course/list" class="nav-link" exact-path>
+                    <router-link to="/home/course/list" class="nav-link" exact-path>
                         <div class="sb-nav-link-icon"><i class="fas fa-list-alt"></i></div>
                         Курстар тізімі
                     </router-link>
