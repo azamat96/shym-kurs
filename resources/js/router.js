@@ -12,7 +12,6 @@ Vue.use(Router);
 const routes = [
     {
         path: '/home',
-        name: 'home',
         component: Home,
         children: [
             {
@@ -60,7 +59,14 @@ const routes = [
     {
         path: '/login',
         name: 'login',
-        component: () => import('./views/Login')
+        component: () => import('./views/Login'),
+        beforeEnter(to, from, next) {
+            if (!auth.isLoggedIn()) {
+                next()
+            } else {
+                next('/home')
+            }
+        }
     }
 ]
 

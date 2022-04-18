@@ -19,7 +19,7 @@
                     <li><a class="dropdown-item" href="#!"><i class="fas fa-cog"></i> Баптаулар</a></li>
                     <li><a class="dropdown-item" href="#!"><i class="fas fa-user-alt"></i> Профиль</a></li>
                     <li><hr class="dropdown-divider" /></li>
-                    <li><a class="dropdown-item" href="#!"><i class="fas fa-sign-out-alt"></i> Системадан шығу</a></li>
+                    <li><button class="dropdown-item" @click="logout"><i class="fas fa-sign-out-alt"></i> Жүйеден шығу</button></li>
                 </ul>
             </li>
         </ul>
@@ -28,9 +28,16 @@
 
 <script>
 import '../plugins/shablon-scripts'
+import * as auth from '../services/auth_service'
 
 export default {
-    name: "Header"
+    name: "Header",
+    methods: {
+        logout: async function() {
+            await auth.logout()
+            this.$router.push('/login')
+        }
+    }
 }
 </script>
 

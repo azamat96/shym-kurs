@@ -21,3 +21,17 @@ export function isLoggedIn() {
     const token = localStorage.getItem('shym-kurs-token');
     return token != null;
 }
+
+export function getAccessToken() {
+    const token = localStorage.getItem('shym-kurs-token')
+    if (!token) {
+        return null;
+    }
+    const tokenData = jwt.decode(token)
+    return tokenData.user.access_token;
+}
+
+export function logout() {
+    http().get('/auth/logout')
+    localStorage.removeItem('shym-kurs-token')
+}
