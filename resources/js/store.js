@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import * as courseService from "./services/course_service";
 import * as teacherService from "./services/teacher_service";
+import * as auth from "./services/auth_service";
 
 Vue.use(Vuex);
 
@@ -9,6 +10,8 @@ export default new Vuex.Store({
     state: {
         apiURL: window.location.origin+'/api',
         serverPath: 'http://localhost:8000',
+        profile: {},
+        isLoggedIn: null,
         langs: [
             {
                 display_name: 'қазақ тілінде',
@@ -111,6 +114,14 @@ export default new Vuex.Store({
                 return course.pivot.pivot_id != id;
             });
         },
+        AUTHENTICATE(state, payload) {
+            state.isLoggedIn = auth.isLoggedIn()
+            if (state.isLoggedIn) {
+                state.profile = payload;
+            } else {
+                state.profile = {};
+            }
+        },
     },
     actions: {
         async getActiveCourses({commit}) {
@@ -142,6 +153,9 @@ export default new Vuex.Store({
         },
         deleteTeacher({}, id) {
             return teacherService.deleteTeacher(id);
+        },
+        authenticate({commit}, data) {
+            commit('AUTHENTICATE', data)
         },
     }
 })

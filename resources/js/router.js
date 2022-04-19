@@ -11,6 +11,10 @@ Vue.use(Router);
 
 const routes = [
     {
+        path: "",
+        redirect: "/home"
+    },
+    {
         path: '/home',
         component: Home,
         children: [

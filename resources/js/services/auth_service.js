@@ -1,5 +1,6 @@
 import {http} from "./http_service";
 import jwt from 'jsonwebtoken'
+import store from "../store";
 
 export function login(user) {
     return http().post('/auth/login', user)
@@ -15,6 +16,7 @@ export function login(user) {
 function setToken(user) {
     const token = jwt.sign({user: user}, 'shymkurslaravelspavueapp')
     localStorage.setItem('shym-kurs-token', token)
+    store.dispatch('authenticate', user.user)
 }
 
 export function isLoggedIn() {
@@ -34,4 +36,8 @@ export function getAccessToken() {
 export function logout() {
     http().get('/auth/logout')
     localStorage.removeItem('shym-kurs-token')
+}
+
+export function getProfile() {
+    return http().get('/auth/profile');
 }

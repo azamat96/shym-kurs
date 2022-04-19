@@ -49,7 +49,9 @@ class AuthController extends Controller
         $token = $tokenData->token;
 
         if ($request->remember_me) {
-            $token->expires_at = Carbon::now()->addWeeks(1);
+            $token->expires_at = Carbon::now()->addWeeks(2);
+        } else {
+            $token->expires_at = Carbon::now()->addDays(3);
         }
 
         if ($token->save()) {
@@ -75,5 +77,17 @@ class AuthController extends Controller
             'message' => 'Logout Successful',
             'status_code' => 200
         ], 200);
+    }
+
+    public function profile(Request $request)
+    {
+        if ($request->user()) {
+            return response()->json($request->user(), 200);
+        }
+
+        return response()->json([
+            'message' => 'Not logged in',
+            'status_code' => 500
+        ], 500);
     }
 }

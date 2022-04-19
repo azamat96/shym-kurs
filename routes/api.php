@@ -12,12 +12,15 @@ Route::group(['prefix' => 'auth'], function() {
 
     Route::group(['middleware' => 'auth:api'], function() {
         Route::get('logout', 'AuthController@logout');
+        Route::get('profile', 'AuthController@profile');
     });
 });
 
-Route::resource('course', 'CourseController')->except(['create', 'show', 'edit']);
-Route::resource('schools', 'SchoolController')->only(['index']);
-Route::resource('subjects', 'SubjectController')->only(['index']);
-Route::resource('teachers', 'TeacherController')->except(['create', 'edit']);
-Route::put('teachers/{teacher}/course/{course}', 'TeacherController@attachCourse');
-Route::delete('teachers/{id}/course/{course}', 'TeacherController@detachCourse');
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::resource('course', 'CourseController')->except(['create', 'show', 'edit']);
+    Route::resource('schools', 'SchoolController')->only(['index']);
+    Route::resource('subjects', 'SubjectController')->only(['index']);
+    Route::resource('teachers', 'TeacherController')->except(['create', 'edit']);
+    Route::put('teachers/{teacher}/course/{course}', 'TeacherController@attachCourse');
+    Route::delete('teachers/{id}/course/{course}', 'TeacherController@detachCourse');
+});

@@ -14,7 +14,7 @@
         <!-- Navbar-->
         <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i> Алмас</a>
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i> {{profile.name}}</a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="#!"><i class="fas fa-cog"></i> Баптаулар</a></li>
                     <li><a class="dropdown-item" href="#!"><i class="fas fa-user-alt"></i> Профиль</a></li>
@@ -29,6 +29,7 @@
 <script>
 import '../plugins/shablon-scripts'
 import * as auth from '../services/auth_service'
+import {mapState} from "vuex";
 
 export default {
     name: "Header",
@@ -37,7 +38,10 @@ export default {
             await auth.logout()
             this.$router.push('/login')
         }
-    }
+    },
+    computed: mapState({
+        profile: 'profile'
+    })
 }
 </script>
 

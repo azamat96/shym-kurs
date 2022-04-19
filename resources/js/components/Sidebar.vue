@@ -26,15 +26,20 @@
             </div>
             <div class="sb-sidenav-footer">
                 <div class="small">Logged in as:</div>
-                Алмас
+                {{profile.name}}
             </div>
         </nav>
     </div>
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
-    name: "Sidebar"
+    name: "Sidebar",
+    computed: mapState({
+        profile: 'profile'
+    })
 }
 </script>
 

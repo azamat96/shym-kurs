@@ -22,7 +22,9 @@
                         </div>
                     </div>
                     <div class="card-footer text-center py-3">
-                        <button type="submit" class="btn btn-primary">Жүйеге кіру</button>
+                        <button type="submit" class="btn btn-primary">
+                            <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span v-else><i class="fas fa-user-circle"></i></span> Жүйеге кіру</button>
                     </div>
                     </form>
                 </div>
@@ -46,11 +48,13 @@ export default {
                 password: '',
                 remember_me: false
             },
-            errors: {}
+            errors: {},
+            loading: false,
         }
     },
     methods: {
         login: async function() {
+            this.loading = true
             try {
                 this.errors = {}
                 const response = await auth.login(this.user);
@@ -73,6 +77,7 @@ export default {
                         break;
                 }
             }
+            this.loading = false
         }
     }
 }
