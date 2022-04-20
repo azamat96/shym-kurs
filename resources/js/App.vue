@@ -21,7 +21,8 @@ export default {
                 this.$store.dispatch('authenticate', response.data)
             }
         } catch (e) {
-            auth.logout()
+            auth.logout();
+            this.$router.push('/login')
         }
     }
 }

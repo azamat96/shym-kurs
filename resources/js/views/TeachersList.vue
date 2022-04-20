@@ -2,7 +2,7 @@
     <div class="container-fluid px-4">
         <div class="d-flex justify-content-between align-items-center">
             <h1 class="mt-4">Мұғалімдер тізімі</h1>
-            <router-link to="/teacher/create" class="btn btn-primary">
+            <router-link to="/home/teacher/create" class="btn btn-primary">
                 <i class="fas fa-plus-circle"></i> Жаңа мұғалім қосу
             </router-link>
         </div>
@@ -175,8 +175,8 @@
                         <td>{{teacher.birth_date}}</td>
                         <td>{{langsList.find((lang) => teacher.lang === lang.name).display_name }}</td>
                         <td>
-                            <router-link :to="'/teacher/show/'+teacher.id" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Ашып көру"><i class="fas fa-eye"></i></router-link>
-                            <router-link :to="'/teacher/update/'+teacher.id" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өзгерту"><i class="fas fa-pencil-alt"></i></router-link>
+                            <router-link :to="'/home/teacher/show/'+teacher.id" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Ашып көру"><i class="fas fa-eye"></i></router-link>
+                            <router-link :to="'/home/teacher/update/'+teacher.id" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өзгерту"><i class="fas fa-pencil-alt"></i></router-link>
                             <button @click="deleteTeacher(teacher, index)" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өшіру"><i class="fas fa-trash"></i></button>
                         </td>
                     </tr>

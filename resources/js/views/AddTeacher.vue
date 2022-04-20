@@ -184,7 +184,7 @@
                                 <span v-if="loading.update" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 <span v-else><i class="fas fa-check-circle"></i></span> Сақтау
                             </button>
-                            <router-link to="/teacher/list">
+                            <router-link to="/home/teacher/list">
                                 <button type="button" class="btn btn-secondary">Тізімге қайта оралу</button>
                             </router-link>
                         </template>
