@@ -167,7 +167,7 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                    <tr v-for="(teacher, index) in teachersList" :key="teacher.id">
+                    <tr v-for="(teacher, index) in teachersList" :key="teacher.id" :class="teacher.row_class">
                         <td>{{pagination.limit*(pagination.page-1)+index+1}}</td>
                         <td>{{teacher.school_name}}</td>
                         <td>{{teacher.name}}</td>

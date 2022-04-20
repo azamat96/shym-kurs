@@ -19,6 +19,7 @@
                             <div style="padding-left: 1rem">
                                 <h3 class="mb-0">{{ name }}</h3>
                                 <span v-if="!isModeCreate && isActive" class="badge rounded-pill bg-success ml-3">Жұмыс істейді</span>
+                                <span v-if="!isModeCreate && !isActive" class="badge rounded-pill bg-secondary ml-3">Жұмыс істемейді</span>
                             </div>
                         </div>
                         <hr size="1" class="hr-line">

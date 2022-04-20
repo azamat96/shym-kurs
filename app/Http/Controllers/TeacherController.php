@@ -40,8 +40,11 @@ class TeacherController extends Controller
         $limit      = $request->input('limit', 15);
         $page       = $request->input('page', 1);
 
+        $fiveYearsEarly = Carbon::now()->year - 5;
         $queryBuilder = DB::table('teachers')
-            ->select('teachers.*', 'schools.name as school_name', 'subjects.name as subject_name')
+            ->select('teachers.*', 'schools.name as school_name', 'subjects.name as subject_name',
+                        DB::raw('MAX(course_teacher.done_date) as last_done_year'),
+                        DB::raw('(case when max(course_teacher.done_date) is null or year(max(course_teacher.done_date)) <= '.$fiveYearsEarly.' then "table-danger" end) as "row_class"'))
             ->join('schools', 'teachers.school_id', '=', 'schools.id')
             ->join('subjects', 'teachers.subject_id', '=', 'subjects.id')
             ->leftJoin('course_teacher', 'teachers.id', '=', 'course_teacher.teacher_id')
@@ -91,6 +94,8 @@ class TeacherController extends Controller
         if ($coursesStrict) {
             $sql_with_bindings .= " HAVING COUNT(*) >= ".count($coursesOn);
         }
+
+        $sql_with_bindings .= " ORDER BY last_done_year ASC";
 
         $total = DB::select("SELECT COUNT(*) as total FROM ( ".$sql_with_bindings." ) as tt")[0]->total;
         $data  = DB::select($sql_with_bindings." LIMIT ".$limit." OFFSET ".($page-1)*$limit);
