@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid px-4">
+    <div class="container-fluid px-2 px-md-4">
         <div class="d-flex justify-content-between align-items-center">
             <h1 class="mt-4">Мұғалімдер тізімі</h1>
             <router-link to="/home/teacher/create" class="btn btn-primary">
@@ -24,7 +24,7 @@
                 </div>
                 <template v-else>
                 <div class="row">
-                    <div class="col-lg-3">
+                    <div class="col-lg-3 col-md-6">
                         <label class="form-label">Мектебі</label>
                         <Multiselect
                             v-model="filter.schools"
@@ -40,7 +40,7 @@
                             selectLabel="" selectedLabel="">
                         </Multiselect>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-3 col-md-6 pt-2 pt-md-0">
                         <label class="form-label">Пәні</label>
                         <Multiselect
                             v-model="filter.subjects"
@@ -56,7 +56,7 @@
                             selectLabel="" selectedLabel="">
                         </Multiselect>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-3 col-md-6 pt-2 pt-lg-0">
                         <div class="d-flex justify-content-between align-items-center">
                             <label class="form-label">Курсын таңдаңыз</label>
                             <div class="form-check form-switch">
@@ -82,7 +82,7 @@
                             @select="removeOptionsWhenNoneSelected">
                         </Multiselect>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-3 col-md-6 pt-2 pt-lg-0">
                         <label class="form-label">Тілін таңдаңыз</label>
                         <Multiselect
                             v-model="filter.langs"
@@ -100,11 +100,11 @@
                     </div>
                 </div>
                 <div class="row mt-2 mb-1">
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 col-md-12">
                         <label class="form-label">Аты-жөнін енгізіңіз</label>
                         <input v-model="filter.name" type="text" class="form-control" placeholder="Мыс: Айнұр Асанова">
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-3 col-md-6 pt-2 pt-lg-0">
                         <label class="form-label">Мансабы</label>
                         <Multiselect
                             v-model="filter.positions"
@@ -120,7 +120,7 @@
                             selectLabel="" selectedLabel="">
                         </Multiselect>
                     </div>
-                    <div class="col-lg-2 d-flex align-items-end">
+                    <div class="col-lg-3 col-md-6 pt-md-0 pt-3 d-flex align-items-end">
                         <button @click="searchTeachers()" class="btn btn-success w-100" style="height: 43px">
                             <i class="fas fa-search"></i> Іздеу/Пойск
                         </button>
@@ -141,6 +141,7 @@
                     </div>
                 </div>
                 <template v-else>
+                <div class="table-responsive-sm">
                 <table id="datatablesSimple" class="table table-bordered">
                     <caption v-if="pagination.total && teachersList.length">Тізімде {{pagination.total}} мұғалімнің {{teachersList.length}} көрсетілінді</caption>
                     <caption v-else>Енгізілген параметрлар бойынша мұғалімдер табылмады...</caption>
@@ -182,6 +183,7 @@
                     </tr>
                     </tbody>
                 </table>
+                </div>
                 <nav v-if="pagination.last_page > 0" aria-label="Page navigation example">
                     <ul class="pagination justify-content-start pagination-sm flex-wrap">
                         <li :class="['page-item', {'disabled': pagination.page === 1}]">

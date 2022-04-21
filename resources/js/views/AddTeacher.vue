@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid px-4">
+    <div class="container-fluid px-2 px-md-4">
         <h1 class="mt-4">Мұғалім қосу/өшіру</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="/">Басты бет</a></li>

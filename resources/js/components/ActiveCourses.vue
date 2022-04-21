@@ -5,7 +5,8 @@
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
-        <table v-else class="table table-bordered mb-0">
+        <div v-else class="table-responsive">
+        <table class="table table-bordered mb-0">
             <caption>{{ coursesList.length > 0 ? 'Тізімде бүкіл активты курстар': 'Активты курстар жоқ'}}</caption>
             <thead class="table-light">
             <tr>
@@ -37,6 +38,7 @@
             </tr>
             </tbody>
         </table>
+        </div>
         <!-- Modal for edit course -->
         <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="editCourseModal">
             <div class="modal-dialog modal-dialog-centered">

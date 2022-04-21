@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid px-4">
+    <div class="container-fluid px-2 px-md-4">
         <div class="d-flex justify-content-between align-items-center">
             <h1 class="mt-4">Курстар тізімі</h1>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
