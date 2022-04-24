@@ -13,9 +13,6 @@
                 <th>#</th>
                 <th>Курс атауы</th>
                 <th>Толық ақпарат</th>
-                <th>2022</th>
-                <th>2021</th>
-                <th>2019 жане оған дейін</th>
                 <th><i class="fas fa-cog"></i> Қызмет түрлері</th>
             </tr>
             </thead>
@@ -24,9 +21,6 @@
                 <td>{{ index+1 }}</td>
                 <td>{{ course.name }}</td>
                 <td>{{ course.description }}</td>
-                <td>106</td>
-                <td>505</td>
-                <td>505</td>
                 <td>
                     <button v-on:click="editCourse(course)" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Өзгерту"><i class="fas fa-pencil-alt"></i></button>
                     <button v-on:click="archiveCourse(course, index)" class="btn btn-secondary btn-sm">

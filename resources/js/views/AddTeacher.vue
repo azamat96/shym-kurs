@@ -1,9 +1,10 @@
 <template>
     <div class="container-fluid px-2 px-md-4">
-        <h1 class="mt-4">Мұғалім қосу/өшіру</h1>
+        <h1 v-if="isModeCreate" class="mt-4">Мұғалім қосу</h1>
+        <h1 v-if="isModeShow" class="mt-4">Мұғалім жайлы толық ақпарат</h1>
+        <h1 v-if="isModeUpdate" class="mt-4">Мұғалімді өзгерту</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="/">Басты бет</a></li>
-            <li class="breadcrumb-item active">Мұғалім қосу/өшіру</li>
         </ol>
         <div class="row">
             <div class="col-lg-8 offset-lg-2">

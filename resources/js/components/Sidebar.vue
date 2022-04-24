@@ -15,7 +15,7 @@
                     </router-link>
                     <router-link to="/home/teacher/create" class="nav-link sidebar-link" exact>
                         <div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>
-                        Мұғалім қосу/өшіру
+                        Жаңа мұғалім қосу
                     </router-link>
                     <div class="sb-sidenav-menu-heading">Курстар</div>
                     <router-link to="/home/course/list" class="nav-link sidebar-link" exact-path>
