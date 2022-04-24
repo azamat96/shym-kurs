@@ -36,3 +36,7 @@ export function searchTeachers(params = {}) {
 export function deleteTeacher(teacherId) {
     return http().delete(`/teachers/${teacherId}`);
 }
+
+export function getTypesCount() {
+    return http().get('teacher/type_counts');
+}

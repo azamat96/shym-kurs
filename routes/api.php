@@ -23,4 +23,5 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('teachers', 'TeacherController')->except(['create', 'edit']);
     Route::put('teachers/{teacher}/course/{course}', 'TeacherController@attachCourse');
     Route::delete('teachers/{id}/course/{course}', 'TeacherController@detachCourse');
+    Route::get('teacher/type_counts', 'TeacherController@typeCounts');
 });

@@ -256,4 +256,47 @@ class TeacherController extends Controller
 
         return response()->json(TRUE, 200);
     }
+
+    public function typeCounts()
+    {
+        $now = Carbon::now();
+        $today = $now->format('Y-m-d');
+        $thisYear = Carbon::now()->year;
+        $fiveYearsEarly = $thisYear - 5;
+
+        $result = [
+            'mustBeStudy' => 0,
+            'nowStudying' => 0,
+            'thisYearDone' => 0,
+        ];
+
+        $types = DB::select('
+        SELECT
+            COUNT(*) AS amount, row_class
+        FROM
+        (
+        SELECT
+            teachers.id,
+            MAX(course_teacher.done_date) as last_done_year,
+            (
+                case
+                    when max(course_teacher.done_date) is null or year(max(course_teacher.done_date)) <= '.$fiveYearsEarly.' then "mustBeStudy"
+                    when max(course_teacher.done_date) >= "'.$today.'" then "nowStudying"
+                    when year(max(course_teacher.done_date)) = '.$thisYear.' then "thisYearDone"
+                end) as "row_class"
+            from teachers
+            LEFT JOIN course_teacher on teachers.id = course_teacher.teacher_id
+            WHERE teachers.is_active = 1
+            GROUP BY teachers.id
+        ) AS DerivedTableAlias GROUP BY row_class
+        ');
+
+        foreach($types as $type) {
+            if (array_key_exists($type->row_class, $result)) {
+                $result[$type->row_class] = $type->amount;
+            }
+        }
+
+        return response()->json($result, 200);
+    }
 }
